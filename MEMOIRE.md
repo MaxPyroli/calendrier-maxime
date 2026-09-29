@@ -203,6 +203,31 @@ Utilisateur : Maxime GRASSER, M2 TRAME parcours TM. Demande initiale : télécha
 - Nouvelle vérification après le retour utilisateur « fait » : `gh auth status` reste invalide. La page web de code appareil seule ne suffit pas lorsque le processus `gh auth login` qui l'a générée a déjà été fermé ; l'utilisateur doit lancer et laisser ouverte cette commande dans son propre terminal pendant la validation.
 - Deuxième essai fait par l'agent : code appareil `FB89-303B` saisi et accepté dans la session GitHub `MaxPyroli` (page « Congratulations, you're all set! »). Le processus CLI fourni par l'environnement s'était néanmoins déjà arrêté : `gh auth status` est toujours invalide et le push échoue encore avec `SEC_E_NO_CREDENTIALS`.
 - Commit local supplémentaire `ea074fe` (`Document GitHub Pages publication status`) créé pour conserver cet état. Il n'est pas sur GitHub, comme le commit initial, faute de jeton Git disponible dans cet environnement.
+- L'utilisateur a finalement téléversé les fichiers dans le dépôt via l'interface. Vérification : `public/`, `tests/`, `MEMOIRE.md`, `README.md`, `audit.json`, `filter_calendar.py`, `requirements.txt` et les autres fichiers racine sont sur la branche `main`.
+- Afin de rendre GitHub Pages compatible avec la publication depuis la racine, la copie de `public/index.html` vers une nouvelle édition racine `index.html` a été préparée dans l'interface (33 058 caractères collés). Au dernier contrôle, l'édition n'est pas encore commitée : le clic automatisé sur « Commit changes... » n'a pas ouvert la confirmation. Pages n'est pas encore configuré.
+
+### Correction de la position de vague — 29/09/2026
+
+- Problème signalé : la vague était visuellement au milieu du cours en cours alors qu'il restait peu de temps. Elle utilisait le pourcentage horaire de toute la journée, tandis que les cartes de cours ont des hauteurs fixes.
+- `template.html` modifié : chaque carte porte désormais ses dates de début et de fin. La vague calcule sa position visuelle dans la carte du cours actif selon l'avancement réel de ce cours ; pendant une pause, elle s'interpole entre les deux cartes. Le pourcentage affiché reste celui de la journée entière.
+- `public/index.html` régénéré depuis `work/source.ics` (549 événements retenus sur 1 011, 272 inconnus). Contrôle JavaScript `node --check` réussi. La correction est locale et devra être téléversée dans le dépôt pour modifier le site déjà publié.
+- Vérification du site publié : le mardi 29 septembre affiche 42 %. Avec le premier cours à 09:00 et le dernier à 18:30, cette valeur correspond à 4 heures écoulées sur 9 h 30 entre ces bornes ; le calcul ne part donc pas de minuit, mais il inclut les pauses dans l'intervalle. Si l'utilisateur souhaite plutôt un pourcentage de temps d'enseignement effectif, il faudra exclure les pauses entre cours du dénominateur.
+
+### Variante « Prochains cours » — 29/09/2026
+
+- À la demande de l'utilisateur, création d'un deuxième livrable séparé : `../prochains-cours/`. Il ne modifie pas l'interface « Ma semaine ».
+- Référence visuelle examinée : écran de départs de `departs.leon.gp`, et dépôt public correspondant identifié : `arnoclr/syspad`. Le dépôt ne contient pas de licence visible ; aucun de ses fichiers ou éléments graphiques n'a été copié.
+- Création de `prochains-cours/template.html` : écran de départs adapté aux cours, avec bandeau TM, horloge, code de module, intitulé de cours, heure de début/fin, décompte avant le cours, état « en cours », boutons de navigation des jours et adaptation mobile.
+- Création de `prochains-cours/generate.py`, qui incorpore les données déjà filtrées depuis `calendrier-maxime/public/index.html`. Résultat `prochains-cours/index.html` généré : 107 occurrences affichables. Vérification syntaxique JavaScript faite avec `node --check` sur `../../work/prochains-cours.js`.
+- Cette variante est locale pour l'instant et ne remplace pas le site GitHub Pages existant.
+
+### Variante syspad autorisée — 29/09/2026
+
+- L'utilisateur indique avoir reçu l'accord explicite de l'auteur et autorise la reprise de `https://github.com/arnoclr/syspad.git`.
+- Le clone Git et curl HTTPS échouent dans le terminal isolé (`SEC_E_NO_CREDENTIALS`). Récupération réussie avec Python `urllib` de l'archive GitHub vers `../../work/syspad-reference`; aucun script issu du dépôt n'a été exécuté.
+- Création séparée de `../prochains-cours-syspad/` à partir de la base Vue/Vite autorisée. Copie du dépôt, puis remplacement de `src/App.vue` et `src/style.css` pour afficher les cours, et ajout de `src/calendar-data.json` depuis l'aperçu filtré. Les données transport JSON ont été conservées dans la copie mais ne sont plus utilisées par la nouvelle interface.
+- Ajout de `ATTRIBUTION.md` afin de documenter la provenance et l'autorisation communiquée par l'utilisateur. Le site « Ma semaine » et la première maquette `../prochains-cours/` restent séparés et inchangés.
+- Validation limitée : la dépendance npm n'est pas présente et le binaire npm du runtime connu n'est pas disponible, donc aucun build Vue n'a été exécuté. Vérifier ultérieurement `npm ci` puis `npm run build` dans ce dossier.
 
 Le déploiement en ligne n'a pas été réalisé : aucun dépôt ni compte cible fourni. Les instructions sont prêtes. Une copie locale ne se met pas à jour seule. Le workflow gratuit planifié GitHub peut être retardé et se désactive après 60 jours sans activité du dépôt public. Réexaminer les inconnus avec l'utilisateur si besoin, en particulier les semaines transversales sans atelier nommé et les codes historiques. Ne pas élargir automatiquement les correspondances au risque d'ajouter des cours refusés. Contrôle visuel manuel de la page encore utile. Aucun projet externe ni autre tâche mis de côté ; seule la sortie ICS initiale a été remplacée par l'aperçu hebdomadaire.
 
@@ -214,3 +239,47 @@ Depuis ce dossier, avec PYTHONPATH pointant vers `../../work/python-packages` (c
 python -m unittest discover -s tests -v
 python weekly.py --input ../../work/source.ics --week 2026-09-28
 ```
+
+## Restauration réelle de la coque syspad — 29/09/2026
+- Correction de la précédente adaptation : App.vue et style.css restaurés depuis work/syspad-reference. Les composants Header, Stops, AnimatedPath, StopName, MiniETA et leurs animations sont à nouveau utilisés.
+- useJourneys.ts remplacé par un adaptateur des événements calendar-data.json : trois prochains cours futurs, triés, noms de cours comme destinations, DTSTART comme heure d'arrivée/départ pour le décompte. Les cours passés sont retirés ; aucun appel API transport nécessaire.
+- Logo TM local et libellé « Prochain cours » ; styles du Header conservés. Horaires des codes affichés en Europe/Paris.
+- Attention : ce dépôt syspad est un écran de desserte avec plan de ligne ; il ne correspond pas au tableau de départs montré initialement sur departs.leon.gp. Cette différence a été expliquée à l'utilisateur.
+- Contrôle vue-tsc réussi (première étape npm run build). Chargement standard de vite.config.ts bloqué par les droits de parcours du sandbox esbuild. Ajout de build-local.mjs appelant directement Vite et son plugin Vue ; build réussi : 57 modules, dist généré. Pas de validation visuelle de cette modification revendiquée.
+- Ma semaine et la première maquette restent séparées. Aucun déploiement distant fait. Les données sont un instantané ; réextraire le calendrier pour les actualiser.
+
+## Tableau RER RATP — correction du choix de panneau
+- Recherche dans arnoclr/transports-screens-hub/src/screens.ts : RER_RATP_BOARD pointe vers departs.leon.gp avec screenId=rer ; syspad est explicitement un autre écran. Le code du tableau demandé n'a pas été retrouvé dans syspad.
+- App.vue/style.css de la variante prochains-cours-syspad remplacés par un tableau fidèle aux caractéristiques observées : bandeau blanc avec ligne rouge, codes violets, destinations bleues, compteurs jaune/noir, horloge supérieure droite, cinq cours actifs/futurs, heures de fin à droite. Il s'agit d'une adaptation écrite localement, pas du code original du panneau leon.gp. Polices existantes de la variante conservées.
+- Les cours terminés sont retirés ; cours en cours identifiés ; attente arrondie à la minute supérieure ; indications de date pour éviter de confondre les prochains jours. Les descriptions distantes ne sont pas interprétées comme HTML.
+- Vue-tsc et build Vite vérifiés. Aucune publication distante. Ma semaine inchangée. Dist constitue le livrable compilé.
+
+## 2026-09-29 — Recherche des sources chez Leon-ED
+- Demande : chercher chez Leon-ED le véritable panneau RER, sans confondre avec SYSPAD.
+- Inspection via API GitHub des dépôts publics, puis arbres et fichiers bruts de transport-screens et ecran-ratp.
+- transport-screens est une coque physique Angular (cadre/LED/logos) qui embarque une iframe ; app.component.ts référence departs.leon.gp screenId=rer en commentaire. Il ne contient pas le renderer RER.
+- ecran-ratp contient réellement un panneau RER A statique : index.html (missions/destinations/attentes/horloge/bandeau), assets/style/style.css, polices Parisine et images RER A. Titres éditables et données fictives. Ce dépôt ancien n'est pas confirmé comme la version actuellement déployée sur departs.leon.gp.
+- Aucun changement des applications ni déploiement durant cette recherche. Scripts intermédiaires : work/find_leon_source.py et work/read_leon_source.py.
+- Suite possible : adapter ce vrai HTML/CSS aux données de cours ; conserver Ma semaine et ne pas affirmer une identité avec le site actuel sans preuve.
+
+## 2026-09-29 — Adaptation effective du panneau Leon-ED/ecran-ratp
+- Création de outputs/prochains-cours-rer, variante statique autonome ; Ma semaine et anciens prototypes conservés sans modification.
+- Source figée au commit d713b58063c0fccc188bb431dc0fa7e7fd13832c. Original complet dans original/. Assets copiés, CSS source strictement inchangé (égalité vérifiée). Attribution et absence de LICENSE documentées sans prétendre à une licence libre.
+- template.html dérivé du HTML original : suppression des champs éditables, titres de cours, lignes générées, horloge Paris, lien local Ma semaine. courses.js utilise textContent pour les données ; affiche cinq événements horaires actifs/futurs, attente, dates/heures, retire les événements terminés. Données embarquées via generate.py : 107 événements extraits de Ma semaine. Pas de rafraîchissement distant automatique.
+- courses.css séparé : adaptations aux intitulés longs et viewport étroit ; aucun redessin du CSS source. Image distante du bandeau remplacée par le logo fourni dans le dépôt.
+- Vérification Node : syntaxe valide ; tests ciblés tri, exclusion des événements terminés, cours actif, attente 1h40, arrondi minute et borne de fin réussis. Script work/test-rer.cjs.
+- Tentative d'ouverture file:// dans navigateur intégré refusée par politique navigateur (protocoles http/https seulement). Pas de contournement ; vérification visuelle non réalisée. Livraison locale à ouvrir dans navigateur externe. Aucun déploiement.
+
+## 2026-09-29 — Correction amplitude et progression Ma semaine
+- Signalement : vagues triangulaires grandissant vers le bas et cours futurs déjà recouverts.
+- Cause forme : anciens clip-path polygon utilisaient un pourcentage de toute la colonne remplie. Remplacement effectif par div.day-water, bord SVG courbe de 16px répété tous les 240px ; anciens pseudo-éléments désactivés explicitement. Oscillation verticale de 8 secondes, amplitude maximale 12px constante, masquée par le bloc jour. Dégradé sur les 70 derniers pixels uniquement ; jours passés uniformes.
+- Progression courseSurface : positions DOM des cartes et horaires, interpolation dans le cours actif et les pauses ; première carte non terminée en cas de chevauchement ; borne avant toute carte future et amplitude limitée selon distance restante. Tri chronologique explicite. Avant premier cours vide, après dernier cours entièrement rempli. Pourcentage toujours basé premier/dernier cours, indépendant de l'oscillation.
+- Mise à jour chaque seconde, recalcul après chargement polices/redimensionnement, nouveau rendu au changement de date.
+- Modifications template.html et public/index.html (données embarquées conservées sans redownload). Script work/fix_water.py. Vérification work/test-water.cjs : syntaxe JS, bornes, 11h50 dans cours 9h–12h, simulation minute par minute sans empiètement sur cours futurs réussies.
+- Pas de vérification visuelle navigateur dans ce tour ; pas de publication GitHub Pages. Variante RER non modifiée.
+
+## 2026-09-29 — Publication autorisée et correction jours passés
+- User a demandé publication puis signalé que les cartes des jours passés passaient devant l'eau. Correction avant publication : ajout du même calque day-water aux jours passés, uniforme, sans animation, z-index 2 au-dessus des cartes z-index 1. Suppression du simple fond bleu qui ne recouvrait pas les cartes.
+- template.html et public/index.html régénérés sans changer les données. Tests de progression et syntaxe repassés.
+- GitHub CLI fonctionne pour lire le dépôt. Pages API retourne 404 ; inspection des contenus confirme deux fichiers index.html (racine et public) de versions différentes. Publication prévue des deux avec le même HTML corrigé et du template pour conserver la correction lors des prochaines générations.
+- Publication non effectuée : gh lit le dépôt public mais POST git/blobs retourne 401 Requires authentication. Navigateur connecté propriétaire ; page upload accessible mais sélecteur filechooser ne s'ouvre ni via bouton ni via input. Aucun fichier envoyé ni commit distant créé. Corrections locales prêtes. Ne pas confondre lecture publique avec authentification CLI valide.

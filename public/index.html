@@ -9,6 +9,15 @@
 .grid{grid-template-columns:minmax(0,640px);max-width:640px;margin-right:54px}.day{overflow:visible}.day-progress::before{z-index:2;left:0;width:100%;height:max(0px,calc(var(--progress,0%) - 8px));background:linear-gradient(to bottom,rgba(65,174,197,.3),rgba(116,214,217,.14));clip-path:none;filter:none;animation:none;border-radius:inherit}.day-progress::after{content:'';display:block;position:absolute;z-index:2;left:0;top:calc(var(--progress,0%) - 8px);width:100%;height:18px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 18' preserveAspectRatio='none'%3E%3Cpath d='M0 9 C8 2 17 2 25 9 S42 16 50 9 S67 2 75 9 S92 16 100 9 L100 18 L0 18 Z' fill='%2374c8d6' fill-opacity='.28'/%3E%3C/svg%3E");background-size:100% 18px;background-repeat:no-repeat;box-shadow:none;animation:water-surface-sway 2.4s ease-in-out infinite;pointer-events:none}.day-past::before{left:0;width:100%;height:100%;background:rgba(106,200,213,.3);clip-path:none;filter:none;animation:none}.day-past::after{display:none}.day-progress .course{z-index:1}.day-progress .day-heading,.day-progress .day-boundary,.day-progress .lunch,.day-progress .meal-note,.day-progress-percent{z-index:3}.day-progress-percent{position:absolute;right:-48px;top:calc(var(--progress,0%) - 12px);padding:4px 7px;border-radius:999px;background:rgba(255,255,255,.92);color:#15768a;font-size:11px;font-weight:800;line-height:1;white-space:nowrap;transform:translateY(-50%);box-shadow:0 1px 4px rgba(20,93,106,.12);transition:top 30s linear}.course{background:rgba(255,255,255,.84);border:1px solid rgba(173,204,200,.8);border-left-width:1px;border-radius:9px;padding:12px;margin:13px 0}@keyframes water-surface-sway{0%,100%{transform:translateY(-3px)}50%{transform:translateY(3px)}}@media (max-width:700px){.grid{max-width:calc(100% - 42px);margin-right:42px}.day-progress-percent{right:-38px}}@media (prefers-reduced-motion:reduce){.day-progress::before,.day-progress::after{animation:none}}
 .grid{position:relative}.day{overflow:hidden}.day-progress::before{z-index:2;top:-16px;left:-10%;width:120%;height:calc(var(--progress,0%) + 16px);background:linear-gradient(to bottom,rgba(65,174,197,.3),rgba(116,214,217,.14));clip-path:polygon(0 0,100% 0,100% 97%,94% 100%,87% 96%,79% 99%,70% 96%,61% 100%,52% 96%,43% 99%,34% 96%,25% 100%,16% 96%,8% 99%,0 97%);filter:blur(.25px);animation:water-surface 4s ease-in-out infinite,water-level-sway 3.2s ease-in-out infinite;border-radius:inherit}.day-progress::after{display:none}.day-past::before{top:0;left:0;width:100%;height:100%;background:rgba(106,200,213,.3);clip-path:none;filter:none;animation:none}.day-past::after{display:none}.day-progress-percent{position:absolute;z-index:4;right:auto;top:0;left:0;padding:4px 7px;border-radius:999px;background:rgba(255,255,255,.92);color:#15768a;font-size:11px;font-weight:800;line-height:1;white-space:nowrap;transform:translateY(-50%);box-shadow:0 1px 4px rgba(20,93,106,.12);transition:top 30s linear}@keyframes water-level-sway{0%,100%{transform:translateY(-3px)}50%{transform:translateY(3px)}}@media (prefers-reduced-motion:reduce){.day-progress::before{animation:none}}
 .day-progress::before{animation:water-surface 6.5s ease-in-out infinite,water-level-sway 6.5s ease-in-out infinite}.day-past::before{top:0;left:0;width:100%;height:100%;background:rgba(106,200,213,.3);clip-path:none;filter:none;transform:none;animation:none}.day-past::after{display:none}.day-progress-percent{transition:none}@keyframes water-level-sway{0%,100%{transform:translateY(-7px)}50%{transform:translateY(7px)}}@media (prefers-reduced-motion:reduce){.day-progress::before{animation:none}}
+
+/* Surface de taille fixe, indépendante de la hauteur remplie. */
+.day-progress::before,.day-progress::after{display:none!important}
+.day-water{position:absolute;z-index:2;pointer-events:none;left:0;right:0;top:-32px;height:calc(var(--surface,0px) + 32px - 8px);background:linear-gradient(to bottom,rgba(106,200,213,.3) max(0px,calc(100% - 70px)),rgba(116,214,217,.18));animation:course-water-sway 8s ease-in-out infinite;transform:translateY(0)}
+.day-water::after{content:'';position:absolute;top:100%;left:0;width:100%;height:16px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='16' viewBox='0 0 240 16'%3E%3Cpath d='M0 0H240V8C220 0 200 0 180 8S140 16 120 8S80 0 60 8S20 16 0 8Z' fill='%2374d6d9' fill-opacity='.18'/%3E%3C/svg%3E") repeat-x}
+.day-past{background:#fff}.day-past .day-water{top:0;height:100%;background:rgba(106,200,213,.3);animation:none;transform:none}.day-past .day-water::after{display:none}.day-complete .day-water{top:0;height:100%;background:rgba(106,200,213,.3);animation:none;transform:none}.day-complete .day-water::after{display:none}
+.day-not-started .day-water{display:none}
+@keyframes course-water-sway{0%,100%{transform:translateY(calc(-1 * var(--sway,0px)))}50%{transform:translateY(var(--sway,0px))}}
+@media(prefers-reduced-motion:reduce){.day-water{animation:none}}
 </style></head><body><main>
 <header><div class="eyebrow">M2 TRAME / TRANSPORTS & MOBILITÉS</div><h1>Ma semaine de cours.</h1><p>Le programme de Maxime, jour par jour : socle commun et enseignements attribués. Horaires en heure de Paris.</p></header>
 <nav aria-label="Choisir une semaine"><button id="prev" aria-label="Semaine précédente">←</button><button id="today">Cette semaine</button><label for="date">Date</label><input id="date" type="date"><button id="next" aria-label="Semaine suivante">→</button></nav>
@@ -48,6 +57,21 @@ function eventBadge(e){
  badge.append(node('strong',e.title));
  return badge;
 }
+function courseSurface(cards,now,height){
+ if(!cards.length)return 0;
+ if(now<cards[0].start)return 0;
+ // Première carte non terminée : les chevauchements ne font pas sauter un cours.
+ const active=cards.find(c=>now<c.end);
+ if(!active)return height;
+ const index=cards.indexOf(active), previous=cards[index-1];
+ let surface;
+ if(now<active.start){
+  const from=previous?previous.bottom:0, since=previous?previous.end:active.start;
+  surface=from+(active.top-from)*Math.max(0,Math.min(1,(now-since)/(active.start-since)||0));
+ }else surface=active.top+(active.bottom-active.top)*Math.max(0,Math.min(1,(now-active.start)/(active.end-active.start)));
+ const next=cards.find(c=>c.start>now);
+ return Math.max(0,Math.min(height,surface,next?next.top-8:height));
+}
 function updateDayProgress(){
  const now=new Date(), today=dayKey(now);
  document.querySelectorAll('.day-progress').forEach(section=>{
@@ -56,23 +80,16 @@ function updateDayProgress(){
   const ratio=Math.max(0,Math.min(1,(now-start)/(end-start)));
   const percent=Math.round(ratio*100);
   const cards=[...section.querySelectorAll('.course[data-start]')];
-  let surface=ratio*section.offsetHeight;
-  const current=cards.find(card=>now>=new Date(card.dataset.start) && now<=new Date(card.dataset.end));
-  if(current){
-   const courseStart=new Date(current.dataset.start), courseEnd=new Date(current.dataset.end);
-   const courseRatio=Math.max(0,Math.min(1,(now-courseStart)/(courseEnd-courseStart)));
-   surface=current.offsetTop+current.offsetHeight*courseRatio;
-  }else{
-   const next=cards.find(card=>now<new Date(card.dataset.start));
-   const previous=[...cards].reverse().find(card=>now>new Date(card.dataset.end));
-   if(next&&previous){
-    const gapStart=new Date(previous.dataset.end), gapEnd=new Date(next.dataset.start);
-    const gapRatio=Math.max(0,Math.min(1,(now-gapStart)/(gapEnd-gapStart)));
-    surface=previous.offsetTop+previous.offsetHeight+(next.offsetTop-(previous.offsetTop+previous.offsetHeight))*gapRatio;
-   }
-  }
-  const visualRatio=Math.max(0,Math.min(1,surface/section.offsetHeight));
-  section.style.setProperty('--progress',(visualRatio*100).toFixed(3)+'%');
+  // Les bornes temporelles correspondent aux bords réels des cartes.
+  const nowMs=now.getTime();
+  const geometry=cards.map(card=>({start:Date.parse(card.dataset.start),end:Date.parse(card.dataset.end),top:card.offsetTop,bottom:card.offsetTop+card.offsetHeight}));
+  const surface=courseSurface(geometry,nowMs,section.offsetHeight);
+  const next=geometry.find(card=>card.start>nowMs);
+  const clearance=next?Math.max(0,next.top-surface-8):24;
+  section.style.setProperty('--surface',surface+'px');
+  section.style.setProperty('--sway',Math.min(12,clearance)+'px');
+  section.classList.toggle('day-not-started',now<start);
+  section.classList.toggle('day-complete',now>=end);
   const label=$('days').querySelector('.day-progress-percent');
   label.textContent=percent+' %';
   label.style.top=(section.offsetTop+surface)+'px';
@@ -88,7 +105,7 @@ $('days').replaceChildren();let count=new Set();
 for(let i=0;i<7;i++){
  const d=add(current,i), k=iso(d), section=node('section','','day'), heading=node('div','','day-heading');heading.append(node('h3',weekday.format(d)));section.append(heading);
  let progressPercent;
- const matches=data.events.filter(e=>{const a=dayKey(new Date(e.start)), b=dayKey(new Date(new Date(e.end).getTime()-1));return a<=k && (b>=k || a===k);});
+ const matches=data.events.filter(e=>{const a=dayKey(new Date(e.start)), b=dayKey(new Date(new Date(e.end).getTime()-1));return a<=k && (b>=k || a===k);}).sort((a,b)=>Date.parse(a.start)-Date.parse(b.start));
  const schedule=daySchedule(matches,k);
  const banners=matches.filter(inDayHeading), right=node('div','','day-heading-right'), today=dayKey(new Date());
  if(k<today){section.classList.add('day-progress','day-past');section.style.setProperty('--progress','100%');}
@@ -104,7 +121,8 @@ for(let i=0;i<7;i++){
  if(schedule?.coversNoon && !schedule.lunch)section.append(node('p','Pause déjeuner non précisée dans le calendrier.','meal-note'));
  if(schedule)section.append(boundary('Fin des cours',schedule.end,'day-end'));
  $('days').append(section);
- if(progressPercent)$('days').append(progressPercent);
+ if(k<today){const water=node('div','','day-water');water.setAttribute('aria-hidden','true');section.append(water);}
+ if(progressPercent){const water=node('div','','day-water');water.setAttribute('aria-hidden','true');section.append(water);$('days').append(progressPercent);}
 }
 $('stats').textContent=count.size+' séance'+(count.size>1?'s':'')+' identifiée'+(count.size>1?'s':'')+' cette semaine';
 updateDayProgress();
@@ -115,6 +133,8 @@ $('date').min=data.first;$('date').max=iso(add(parse(data.last),6));$('date').on
 $('today').onclick=()=>select(parse(dayKey(new Date())));
 $('footer').textContent='Données actualisées le '+data.updated+' · '+data.kept+' événements retenus sur '+data.total+' dans la source · '+data.unknown+' intitulés non reconnus (événements). La page hébergée est reconstruite toutes les 6 heures ; une copie téléchargée reste un instantané.';
 render();
-setInterval(updateDayProgress,30000);
+setInterval(()=>{if(dayKey(new Date())!==renderedDay){renderedDay=dayKey(new Date());render();}else updateDayProgress();},1000);
+let renderedDay=dayKey(new Date());
+document.fonts.ready.then(updateDayProgress);
 window.addEventListener('resize',updateDayProgress);
 </script></body></html>

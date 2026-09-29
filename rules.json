@@ -1,0 +1,40 @@
+{
+  "exclude": [
+    {"id":"ris-high-low-tech", "pattern":"\\bhigh tech low tech\\b"},
+    {"id":"trafic", "pattern":"\\b(ingenierie du trafic|itra)\\b"},
+    {"id":"fret", "pattern":"\\b(marchandises?|fret|logistiques?)\\b"},
+    {"id":"mobilite-monde", "pattern":"\\b(systemes? de mobilite .*monde|transports dans les grandes villes du monde)\\b"},
+    {"id":"conception-non-acost", "pattern":"\\bconception (?:des? )?systemes? (?:de )?transport (?:et (?:de )?mobilite|de personnes)\\b"},
+    {"id":"economie-transports-avance", "pattern":"\\beconomie des transports (?:niveau )?avance(?:e|s|es)?\\b"},
+    {"id":"paysage", "pattern":"\\bpaysage\\b"},
+    {"id":"urbanisme-international", "pattern":"\\b(urbanisme et mobilites|sud global|international)\\b"},
+    {"id":"sig-distinct", "pattern":"^(?!.*\\b(?:analyse (?:des )?donnees de mobilite|donnees (?:de |de la )?mobilites?)\\b).*\\bsig\\b"},
+    {"id":"ris", "pattern":"\\b(ris|reseaux et limites planetaires|gestion et maintenance|infrastructures et risques|modeles sociotechniques|circulations transnationales|modeles economiques et sobriete)\\b"}
+  ],
+  "keep": [
+    {"id":"commun-reseaux-territoires", "pattern":"\\breseaux et territoires\\b"},
+    {"id":"commun-transitions", "pattern":"\\btransitions? socio ecologiques? et environnementales?\\b|^(?:ue ?2 )?transitions?$"},
+    {"id":"commun-planification", "pattern":"\\bplanification gouvernance politiques et action publique\\b"},
+    {"id":"commun-usages", "pattern":"\\busages usagers pratiques sociales\\b"},
+    {"id":"commun-professionnalisation", "pattern":"\\bprofessionnalisation\\b|\\bseminaire d accompagnement\\b|\\bstage et memoire\\b"},
+    {"id":"projet", "pattern":"\\bateliers? (?:de projet|projet|tm)\\b|^atelier(?: journee| restitution (?:finale|intermediaire))?$|^atelier ?a[0-9]+(?: a[0-9]+)*$"},
+    {"id":"controverses", "pattern":"\\bcontroverses (?:sociotechniques|dans les transports et les mobilites)\\b|^rendu controverses$"},
+    {"id":"anglais", "pattern":"\\banglais professionnel\\b|^ue 9 anglais\\b"},
+    {"id":"commun", "pattern":"\\bactivites communes?\\b"},
+    {"id":"voyage", "pattern":"\\bvoyage d etudes?\\b"},
+    {"id":"stages-memoires", "pattern":"\\b(?:reunions? d information|point|presentation|seance de presentation) (?:sur |des? |du |les )?(?:stages?|memoires?)\\b|\\bpresentation baip\\b"},
+    {"id":"enjeux", "pattern":"\\benjeux (?:environnementaux|economiques|sociaux|de recits|de recits d images et d imaginaires)\\b|\\bevaluation (?:cours |cours d )?enjeux\\b|\\bevaluation commune ec 1 x enjeux\\b"},
+    {"id":"territoires", "pattern":"\\btransports? territoires (?:et )?amenagement\\b"},
+    {"id":"pratiques", "pattern":"\\bpratiques de mobilite\\b"},
+    {"id":"institutions", "pattern":"\\binstitutions et gouvernance\\b"},
+    {"id":"socio-economie", "pattern":"\\bsocio economie de la mobilite\\b"},
+    {"id":"organisation", "pattern":"\\borganisation des transports publics\\b"},
+    {"id":"articulation", "pattern":"\\barticulation transports? amenagement\\b"},
+    {"id":"masyt", "pattern":"\\bmasyt\\b|\\bmethodes d analyse des systemes territoriaux\\b"},
+    {"id":"acost", "pattern":"\\bacost\\b|\\banalyse et conception (?:des?|de) systemes? de transport\\b"},
+    {"id":"economie-reseaux", "pattern":"\\beconomie des reseaux\\b"},
+    {"id":"donnees-mobilite", "pattern":"\\bdonnees (?:de |de la )?mobilites?\\b"},
+    {"id":"photo-video", "pattern":"\\bphoto video\\b"},
+    {"id":"reseaux-public", "pattern":"\\breseaux et (?:espaces publics|fabrique de l espace public)\\b"}
+  ]
+}

@@ -15,7 +15,7 @@
 .day-water{position:absolute;z-index:2;pointer-events:none;left:0;right:0;top:-32px;height:calc(var(--surface,0px) + 32px - 8px);background:linear-gradient(to bottom,rgba(106,200,213,.3) max(0px,calc(100% - 70px)),rgba(116,214,217,.18));animation:course-water-sway 8s ease-in-out infinite;transform:translateY(0)}
 .day-water::after{content:'';position:absolute;top:100%;left:0;width:100%;height:16px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='16' viewBox='0 0 240 16'%3E%3Cpath d='M0 0H240V8C220 0 200 0 180 8S140 16 120 8S80 0 60 8S20 16 0 8Z' fill='%2374d6d9' fill-opacity='.18'/%3E%3C/svg%3E") repeat-x}
 .day-past{background:#fff}.day-past .day-water{top:0;height:100%;background:rgba(106,200,213,.3);animation:none;transform:none}.day-past .day-water::after{display:none}.day-complete .day-water{top:0;height:100%;background:rgba(106,200,213,.3);animation:none;transform:none}.day-complete .day-water::after{display:none}
-.day-not-started .day-water{display:none}
+
 @keyframes course-water-sway{0%,100%{transform:translateY(calc(-1 * var(--sway,0px)))}50%{transform:translateY(var(--sway,0px))}}
 @media(prefers-reduced-motion:reduce){.day-water{animation:none}}
 </style></head><body><main>
@@ -57,9 +57,12 @@ function eventBadge(e){
  badge.append(node('strong',e.title));
  return badge;
 }
-function courseSurface(cards,now,height){
+function courseSurface(cards,now,height,midnight){
  if(!cards.length)return 0;
- if(now<cards[0].start)return 0;
+ if(now<cards[0].start){
+  const elapsed=Math.max(0,now-midnight), duration=cards[0].start-midnight;
+  return duration>0?cards[0].top*Math.min(1,elapsed/duration):0;
+ }
  // Première carte non terminée : les chevauchements ne font pas sauter un cours.
  const active=cards.find(c=>now<c.end);
  if(!active)return height;
@@ -70,7 +73,7 @@ function courseSurface(cards,now,height){
   surface=from+(active.top-from)*Math.max(0,Math.min(1,(now-since)/(active.start-since)||0));
  }else surface=active.top+(active.bottom-active.top)*Math.max(0,Math.min(1,(now-active.start)/(active.end-active.start)));
  const next=cards.find(c=>c.start>now);
- return Math.max(0,Math.min(height,surface,next?next.top-8:height));
+ return Math.max(0,Math.min(height,surface,next?next.top:height));
 }
 function updateDayProgress(){
  const now=new Date(), today=dayKey(now);
@@ -83,12 +86,15 @@ function updateDayProgress(){
   // Les bornes temporelles correspondent aux bords réels des cartes.
   const nowMs=now.getTime();
   const geometry=cards.map(card=>({start:Date.parse(card.dataset.start),end:Date.parse(card.dataset.end),top:card.offsetTop,bottom:card.offsetTop+card.offsetHeight}));
-  const surface=courseSurface(geometry,nowMs,section.offsetHeight);
+  const parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Paris',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).formatToParts(now);
+  const value=type=>Number(parts.find(p=>p.type===type).value);
+  const midnight=nowMs-((value('hour')*60+value('minute'))*60+value('second'))*1000-now.getMilliseconds();
+  const surface=courseSurface(geometry,nowMs,section.offsetHeight,midnight);
   const next=geometry.find(card=>card.start>nowMs);
   const clearance=next?Math.max(0,next.top-surface-8):24;
   section.style.setProperty('--surface',surface+'px');
   section.style.setProperty('--sway',Math.min(12,clearance)+'px');
-  section.classList.toggle('day-not-started',now<start);
+  
   section.classList.toggle('day-complete',now>=end);
   const label=$('days').querySelector('.day-progress-percent');
   label.textContent=percent+' %';

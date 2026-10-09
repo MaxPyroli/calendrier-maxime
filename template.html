@@ -53,7 +53,7 @@ function daySchedule(events,k){
 function boundary(label,date,extra=''){const box=node('div','','day-boundary '+extra);box.append(node('span',label),node('strong',clock.format(date)));return box;}
 function lunchCard(lunch){const box=node('aside','','lunch'), duration=Math.round((lunch.end-lunch.start)/60000), h=Math.floor(duration/60), m=duration%60;box.append(node('strong','Pause déjeuner'),node('p',(h?h+' h ':'')+(m?m+' min':'')));return box;}
 function spansDays(e){return dayKey(new Date(e.start))!==dayKey(new Date(Math.max(new Date(e.start).getTime(),new Date(e.end).getTime()-1)));}
-function inDayHeading(e){return e.allDay || spansDays(e) || /\bjournee\b/.test(e.title.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase());}
+function inDayHeading(e){return e.allDay || spansDays(e);}
 function eventBadge(e){
  const multi=spansDays(e), badge=node('div','','day-badge'+(multi?' multi':''));
  badge.append(node('strong',e.title));

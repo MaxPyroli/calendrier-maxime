@@ -1,5 +1,13 @@
 # Mémoire de reprise — 9 octobre 2026
 
+## Atelier (journée) comme carte de cours — vague corrigée (9 octobre 2026)
+
+- Signalement utilisateur : « Atelier (journée) » n'est pas placé dans la journée mais seulement affiché comme événement « toute la journée », et la vague n'avance pas correctement.
+- Cause : `inDayHeading()` de `template.html` envoyait dans le badge de l'en-tête tout événement dont le titre contient « journée », même avec des horaires (règle ajoutée à la quatrième intervention). Le vendredi n'avait donc aucune carte de cours ; le calcul de la vague (`courseSurface`) s'appuie sur les cartes et renvoyait 0 : le pourcentage montait de 0 à 100 % pendant que l'eau restait en haut (reproduit dans Chromium avant correction, surface 0 px à toute heure).
+- Correction : `inDayHeading(e)` ne retient plus que les événements `allDay` ou sur plusieurs jours (« Activités communes de l'EUP » reste un badge bleu). Un événement horaire d'une seule journée devient une carte normale ; il garde ses repères « Premier cours 09:00 » et « Fin des cours 18:00 » inchangés. Dix occurrences sont concernées dans la plage actuelle : les « Atelier (journée) » du vendredi, 02/10 au 18/12.
+- Vérifié avec Chromium et horloge simulée le vendredi 9/10 : l'avancement de la vague dans la carte égale le pourcentage de la journée (25 % à 11 h 15, 50 % à 13 h 30, 86 % à 16 h 45), eau avant la carte à 8 h et tout le jour rempli après 18 h. Aucune erreur JavaScript. Le badge de l'atelier a disparu : la carte porte maintenant l'information avec ses horaires.
+- `index.html` régénéré depuis le flux réel ; README mis à jour.
+
 ## Ouverture sur le jour actuel — reprise avec Claude Code (9 octobre 2026)
 
 - Reprise du projet depuis Claude Code (la conversation Codex n'était pas accessible ; l'historique de ce fichier a servi de base). État constaté : aucun dossier `.github/workflows` dans le dépôt, donc pas de régénération automatique ; les données embarquées datent toujours du 29/09. Les entrées ci-dessous ne mentionnent ni la PWA ni le commit du 30/09 : PWA = `sw.js` (réseau d'abord, repli sur cache), `install.js`, `manifest.webmanifest`, icônes ; `index.html` à la racine et `public/index.html` sont des copies identiques.

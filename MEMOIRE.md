@@ -1,3 +1,14 @@
+# Mémoire de reprise — 9 octobre 2026
+
+## Ouverture sur le jour actuel — reprise avec Claude Code (9 octobre 2026)
+
+- Reprise du projet depuis Claude Code (la conversation Codex n'était pas accessible ; l'historique de ce fichier a servi de base). État constaté : aucun dossier `.github/workflows` dans le dépôt, donc pas de régénération automatique ; les données embarquées datent toujours du 29/09. Les entrées ci-dessous ne mentionnent ni la PWA ni le commit du 30/09 : PWA = `sw.js` (réseau d'abord, repli sur cache), `install.js`, `manifest.webmanifest`, icônes ; `index.html` à la racine et `public/index.html` sont des copies identiques.
+- Demande utilisateur : arriver directement sur le jour actuel.
+- Cause : `template.html` initialisait `current` avec `data.monday`, la semaine figée à la génération (28/09), et ne se repositionnait pas sur aujourd'hui.
+- `template.html` (et les deux copies générées `public/index.html` et `index.html`, corrigées à l'identique faute de source `.ics` locale — mêmes données) : nouvelle fonction `showToday()` appelée au chargement et par le bouton « Cette semaine ». Elle sélectionne la semaine en cours (bornée à la plage de la page) puis fait défiler jusqu'à la carte marquée `.day-today`, avec `scroll-margin-top:12px`. Pas de défilement le lundi (la page reste en haut, avec le titre et la navigation) ni si aujourd'hui est hors plage ; défilement instantané à l'ouverture, doux pour le bouton, sauf si `prefers-reduced-motion`.
+- Vérifié avec Chromium headless et horloge simulée (viewport mobile) : vendredi 9/10, lundi 5/10, dimanche 11/10, mardi 29/09, date hors plage et bouton « Cette semaine » ; aucune erreur JavaScript. Les 8 tests Python passent. Fichiers HTML en fins de ligne CRLF, conservées.
+- Reste à faire : remettre le workflow GitHub Actions (données encore figées au 29/09), activer Pages, supprimer les doublons racine/`public`, ajouter un `.gitignore` (un `.pyc` est versionné dans `tests/__pycache__`).
+
 # Mémoire de reprise — 29 septembre 2026
 
 ## Préparation au déploiement GitHub — vingt-cinquième intervention

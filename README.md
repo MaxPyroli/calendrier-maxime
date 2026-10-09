@@ -40,7 +40,7 @@ python weekly.py --week 2026-09-28
 python weekly.py --input source.ics --week 2026-10-05
 ```
 
-La page contient 25 semaines : douze avant et douze après la semaine choisie. Les flèches et le sélecteur naviguent dans cette période. Le bouton « Cette semaine » revient à la semaine actuelle, ou à la limite disponible dans une ancienne copie. Le fichier local est un instantané ; la version hébergée est reconstruite automatiquement. Recharger la page pour voir une nouvelle génération.
+La page contient 25 semaines : douze avant et douze après la semaine choisie. Les flèches et le sélecteur naviguent dans cette période. À l'ouverture, la page affiche directement la semaine en cours et défile jusqu'au jour actuel (le lundi, premier jour de la semaine, elle reste en haut) ; la semaine choisie à la génération n'est qu'un repère pour la plage de 25 semaines. Le bouton « Cette semaine » fait de même et, dans une ancienne copie dont la plage ne contient plus aujourd'hui, revient à la limite disponible sans défiler. Le fichier local est un instantané ; la version hébergée est reconstruite automatiquement. Recharger la page pour voir une nouvelle génération.
 
 ## Filtrage et limites explicites
 

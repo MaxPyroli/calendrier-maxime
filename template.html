@@ -20,7 +20,7 @@
 
 @keyframes course-water-sway{0%,100%{transform:translateY(calc(-1 * var(--sway,0px)))}50%{transform:translateY(var(--sway,0px))}}
 @media(prefers-reduced-motion:reduce){.day-water{animation:none}}
-</style></head><body><main>
+.day-today{scroll-margin-top:12px}</style></head><body><main>
 <header><div class="eyebrow">M2 TRAME / TRANSPORTS & MOBILITÉS</div><h1>Ma semaine de cours.</h1><p>Le programme de Maxime, jour par jour : socle commun et enseignements attribués. Horaires en heure de Paris.</p></header>
 <nav aria-label="Choisir une semaine"><button id="prev" aria-label="Semaine précédente">←</button><button id="today">Cette semaine</button><label for="date">Date</label><input id="date" type="date"><button id="next" aria-label="Semaine suivante">→</button></nav>
 <h2 id="range"></h2><div id="stats" aria-live="polite"></div><div class="grid" id="days"></div>
@@ -108,7 +108,7 @@ function updateDayProgress(){
 function render(){
 const key=iso(current), end=iso(add(current,7));$('date').value=key;
 $('prev').disabled=key<=data.first;$('next').disabled=key>=data.last;
-$('range').textContent=fmt.format(current)+' – '+fmt.format(add(current,6))+' '+current.getUTCFullYear();
+const lastDay=add(current,6), firstYear=current.getUTCFullYear(), lastYear=lastDay.getUTCFullYear();$('range').textContent=fmt.format(current)+(firstYear!==lastYear?' '+firstYear:'')+' – '+fmt.format(lastDay)+' '+lastYear;
 $('days').replaceChildren();let count=new Set();
 for(let i=0;i<7;i++){
  const d=add(current,i), k=iso(d), section=node('section','','day'), heading=node('div','','day-heading');heading.append(node('h3',weekday.format(d)));section.append(heading);
@@ -116,7 +116,7 @@ for(let i=0;i<7;i++){
  const matches=data.events.filter(e=>{const a=dayKey(new Date(e.start)), b=dayKey(new Date(new Date(e.end).getTime()-1));return a<=k && (b>=k || a===k);}).sort((a,b)=>Date.parse(a.start)-Date.parse(b.start));
  const schedule=daySchedule(matches,k);
  const banners=matches.filter(inDayHeading), right=node('div','','day-heading-right'), today=dayKey(new Date());
- if(k<today){section.classList.add('day-progress','day-past');section.style.setProperty('--progress','100%');}
+ if(k<today){section.classList.add('day-progress','day-past');section.style.setProperty('--progress','100%');} if(k===today)section.classList.add('day-today');
  if(schedule && k===today){section.classList.add('day-progress');section.dataset.day=k;section.dataset.start=schedule.start.toISOString();section.dataset.end=schedule.end.toISOString();progressPercent=node('span','0 %','day-progress-percent');}
  if(banners.length){const badges=node('div','','day-badges');for(const e of banners){badges.append(eventBadge(e));count.add(e);}right.append(badges);}
  if(right.children.length)heading.append(right);
@@ -138,9 +138,10 @@ updateDayProgress();
 $('prev').onclick=()=>{current=add(current,-7);render();};$('next').onclick=()=>{current=add(current,7);render();};
 function select(d){current=monday(d);if(iso(current)<data.first)current=parse(data.first);if(iso(current)>data.last)current=parse(data.last);render();}
 $('date').min=data.first;$('date').max=iso(add(parse(data.last),6));$('date').onchange=()=>{if($('date').value)select(parse($('date').value));};
-$('today').onclick=()=>select(parse(dayKey(new Date())));
+function showToday(animate){select(parse(dayKey(new Date())));const day=document.querySelector('.day-today');if(day&&day!==$('days').firstElementChild)day.scrollIntoView({block:'start',behavior:animate&&!matchMedia('(prefers-reduced-motion: reduce)').matches?'smooth':'auto'});}
+$('today').onclick=()=>showToday(true);
 $('footer').textContent='Données actualisées le '+data.updated+' · '+data.kept+' événements retenus sur '+data.total+' dans la source · '+data.unknown+' intitulés non reconnus (événements). La page hébergée est reconstruite toutes les 6 heures ; une copie téléchargée reste un instantané.';
-render();
+showToday();
 setInterval(()=>{if(dayKey(new Date())!==renderedDay){renderedDay=dayKey(new Date());render();}else updateDayProgress();},1000);
 let renderedDay=dayKey(new Date());
 document.fonts.ready.then(updateDayProgress);

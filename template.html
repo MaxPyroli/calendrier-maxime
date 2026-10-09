@@ -108,7 +108,7 @@ function updateDayProgress(){
 function render(){
 const key=iso(current), end=iso(add(current,7));$('date').value=key;
 $('prev').disabled=key<=data.first;$('next').disabled=key>=data.last;
-$('range').textContent=fmt.format(current)+' – '+fmt.format(add(current,6))+' '+current.getUTCFullYear();
+const lastDay=add(current,6), firstYear=current.getUTCFullYear(), lastYear=lastDay.getUTCFullYear();$('range').textContent=fmt.format(current)+(firstYear!==lastYear?' '+firstYear:'')+' – '+fmt.format(lastDay)+' '+lastYear;
 $('days').replaceChildren();let count=new Set();
 for(let i=0;i<7;i++){
  const d=add(current,i), k=iso(d), section=node('section','','day'), heading=node('div','','day-heading');heading.append(node('h3',weekday.format(d)));section.append(heading);

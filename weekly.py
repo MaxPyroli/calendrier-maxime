@@ -53,7 +53,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--input', type=Path)
     parser.add_argument('--week', type=date.fromisoformat, default=datetime.now(PARIS).date())
-    parser.add_argument('--output', type=Path, default=ROOT / 'public/index.html')
+    parser.add_argument('--output', type=Path, default=ROOT / 'index.html')
     args = parser.parse_args()
     rules = Rules(json.loads((ROOT / 'rules.json').read_text(encoding='utf-8')))
     raw = args.input.read_bytes() if args.input else download(SOURCE)

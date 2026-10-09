@@ -8,17 +8,16 @@ Les événements toute la journée (ou intitulés « journée ») apparaissent e
 
 La progression de la semaine forme une seule vague : toute date passée, y compris dans les semaines précédentes et même sans cours identifié, est remplie uniformément d'eau bleue et reste immobile. Le jour en cours est le seul à conserver la vague douce animée ; les jours futurs restent vides. La couche d'eau active est volontairement plus large et plus haute que la carte, mais elle est découpée par les bords arrondis de celle-ci. Son mouvement vertical, plus ample et plus lent, ne devient donc visible qu'à la surface basse, jamais au-dessus de la carte. Le pourcentage de la journée, sans libellé, se place à l'extérieur de la carte, à droite et à la hauteur moyenne de la vague ; il se recale aussi au redimensionnement, sans animer ses petits ajustements horaires. Chaque cours est présenté dans son propre bloc, sans bande colorée latérale. Les jours s'affichent sur une seule colonne, avec une largeur maximale de 640 px. L'animation est désactivée si l'appareil demande de réduire les animations. Ce repère n'est pas affiché quand la journée ne contient pas de créneau horaire exploitable.
 
-## Mise en place gratuite : GitHub Actions + Pages
+## Mise en place gratuite : GitHub Actions + Pages (branche)
 
-1. Créer un dépôt **public** GitHub nommé, par exemple, `calendrier-trame`, avec une branche `main`.
-2. Y copier le **contenu** de ce dossier, y compris `.github/workflows/calendar.yml` et `.gitignore`. Le dossier `.github` peut être masqué dans certains explorateurs.
-3. Dans **Settings → Pages → Build and deployment → Source**, choisir **GitHub Actions**.
-4. Dans **Actions → Actualiser le calendrier → Run workflow**, lancer la première génération sur `main` (ou pousser un commit).
-5. Ouvrir `https://VOTRE-COMPTE.github.io/calendrier-trame/`. Ajouter cette adresse aux favoris, ou à l'écran d'accueil du téléphone.
+1. Dépôt **public** GitHub avec une branche `main` (ici `MaxPyroli/calendrier-maxime`).
+2. Dans **Settings → Pages → Build and deployment**, choisir **Source : Deploy from a branch**, branche `main`, dossier `/ (root)`. Le site est donc servi directement depuis `index.html` à la racine.
+3. Le workflow `.github/workflows/calendar.yml` (« Actualiser le calendrier ») s'exécute toutes les six heures (minute 17 UTC), à la demande (**Actions → Actualiser le calendrier → Run workflow**) et à chaque modification du code de génération sur `main`. Il lance les tests, télécharge la source, régénère `index.html` et `audit.json`, puis les commit avec `github-actions[bot]` seulement si la génération a réussi et si les fichiers ont changé. La permission `contents: write` est déclarée dans le fichier ; aucun secret n'est nécessaire.
+4. Ouvrir `https://maxpyroli.github.io/calendrier-maxime/`. Ajouter cette adresse aux favoris, ou à l'écran d'accueil du téléphone (la page s'installe aussi comme application).
 
-Le workflow télécharge la source et reconstruit la page toutes les six heures, à la minute 17 (UTC). Il ne nécessite aucun secret ni serveur. Pages est disponible pour les dépôts publics avec GitHub Free et les runners standard Actions sont gratuits pour les dépôts publics. Les données affichées et le code seront publics. Les descriptions ne sont pas affichées ; elles servent uniquement au filtrage.
+La date de mise à jour change à chaque exécution : le dépôt reçoit donc environ quatre commits automatiques par jour. Pages est disponible pour les dépôts publics avec GitHub Free et les runners standard Actions sont gratuits pour les dépôts publics. Les données affichées et le code sont publics. Les descriptions ne sont pas affichées ; elles servent uniquement au filtrage.
 
-Les tâches planifiées peuvent être retardées par GitHub. Elles sont désactivées après 60 jours sans activité dans un dépôt public : vérifier Actions et réactiver le workflow si nécessaire. Ce service n'est donc pas une notification garantie de changement de salle de dernière minute. La date de mise à jour figure en bas de page. En cas d'échec de téléchargement ou de validation, le dernier déploiement reste en place.
+Les tâches planifiées peuvent être retardées par GitHub. Elles sont désactivées après 60 jours sans activité dans un dépôt public ; les commits automatiques comptent en principe comme activité, mais vérifier Actions de temps en temps et réactiver le workflow si nécessaire. Ce service n'est donc pas une notification garantie de changement de salle de dernière minute. La date de mise à jour figure en bas de page. En cas d'échec de téléchargement ou de validation, le dernier déploiement reste en place.
 
 ## Exécution locale
 
@@ -33,7 +32,7 @@ python -m unittest discover -s tests -v
 python weekly.py
 ```
 
-Ouvrir `public/index.html`. Pour une autre date ou une source téléchargée :
+Ouvrir `index.html` (à la racine, c'est aussi le fichier servi par Pages). Pour une autre date ou une source téléchargée :
 
 ```sh
 python weekly.py --week 2026-09-28
@@ -66,7 +65,9 @@ Les récurrences sont développées par `recurring-ical-events` avec les excepti
 
 ## Fichiers et reprise
 
-- `weekly.py` : génération hebdomadaire et développement des récurrences.
+- `weekly.py` : génération hebdomadaire et développement des récurrences ; écrit `index.html` et `audit.json`.
+- `.github/workflows/calendar.yml` : tests, génération et publication automatiques.
+- `sw.js`, `install.js`, `manifest.webmanifest`, icônes : installation en application et consultation hors connexion (le réseau est essayé d'abord, le cache sert de secours).
 - `template.html` : interface autonome, données distantes insérées comme texte.
 - `filter_calendar.py`, `rules.json` : moteur de filtrage.
 - `tests/test_calendar.py` : cas de filtrage, récurrence, stabilité, sécurité d'affichage.

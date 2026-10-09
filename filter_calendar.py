@@ -85,6 +85,9 @@ def filter_ics(raw, rules):
                            'series_blocked': decision == 'keep' and not kept})
             if kept:
                 output.add_component(deepcopy(event))
+    # Le flux Google n'a pas d'ordre stable d'une requête à l'autre : un rapport trié
+    # évite de réécrire tout audit.json à chaque exécution automatique.
+    report.sort(key=lambda r: (r['start'], r['uid'], r['summary']))
     encoded = output.to_ical()
     Calendar.from_ical(encoded)
     return encoded, report

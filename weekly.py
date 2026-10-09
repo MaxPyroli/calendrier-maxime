@@ -37,7 +37,7 @@ def generate(raw, rules, anchor):
                        'location': str(event.get('LOCATION', '')),
                        'start': local(begin).isoformat(), 'end': local(finish).isoformat(),
                        'allDay': all_day})
-    events.sort(key=lambda e: e['start'])
+    events.sort(key=lambda e: (e['start'], e['end'], e['title']))
     data = {'events': events, 'monday': monday.isoformat(), 'first': start.isoformat(),
             'last': (end - timedelta(weeks=1)).isoformat(),
             'updated': datetime.now(PARIS).strftime('%d/%m/%Y à %H:%M'),

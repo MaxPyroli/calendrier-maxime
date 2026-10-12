@@ -43,7 +43,14 @@ La page contient 25 semaines : douze avant et douze après la semaine choisie. L
 
 ## Menu de la cantine (myMRS)
 
-`menu.py` se connecte à myMRS avec les secrets `MYMRS_LOGIN` et `MYMRS_PASSWORD` (Settings → Secrets and variables → Actions), récupère le planning des repas et produit `menu.html`, une page étroite prévue pour être intégrée dans Notion. Seuls les plats sont publiés : ni nom, ni solde, ni badge. L'étape du workflow est facultative : sans secrets ou en cas d'échec, le calendrier est publié normalement et le dernier menu en ligne reste en place.
+`menu.py` se connecte à myMRS, récupère le planning des repas et produit `menu.html`, une page étroite prévue pour être intégrée dans Notion. Seuls les plats sont publiés : ni nom, ni solde, ni badge. L'étape du workflow est facultative : sans secrets ou en cas d'échec, le calendrier est publié normalement et le dernier menu en ligne reste en place.
+
+Accès, par ordre de préférence (Settings → Secrets and variables → Actions) :
+
+1. `MYMRS_LOGIN` + `MYMRS_PASSWORD`, durable. Si le mot de passe commence par un caractère spécial et que le champ le refuse, fournir `MYMRS_PASSWORD_HEX` à la place : le mot de passe en hexadécimal. Dans la console du navigateur : `[...new TextEncoder().encode(prompt('Mot de passe ?'))].map(b=>b.toString(16).padStart(2,'0')).join('')`.
+2. `MYMRS_TOKEN`, le jeton de l'appli (`token=` dans la requête `connexion.cfc`), sans mot de passe mais **susceptible d'expirer après quelques jours** : le journal indique alors « Jeton refusé ou expiré ».
+
+Un lancement manuel du workflow avec l'option « essai » affiche la forme des réponses et le menu obtenu sans rien publier.
 
 ```sh
 export MYMRS_LOGIN=... MYMRS_PASSWORD=...

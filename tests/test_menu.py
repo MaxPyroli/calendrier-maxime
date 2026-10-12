@@ -99,7 +99,19 @@ class MenuTests(unittest.TestCase):
         self.assertEqual(menu.identities_from_env({'MYMRS_LOGIN': 'a'}), [])
         both = {'MYMRS_TOKEN': ' jeton \n', 'MYMRS_LOGIN': 'a@b.fr', 'MYMRS_PASSWORD': '#x'}
         self.assertEqual(menu.identities_from_env(both),
-                         [{'token': 'jeton'}, {'login': 'a@b.fr', 'password': '#x'}])
+                         [{'login': 'a@b.fr', 'password': '#x'}, {'token': 'jeton'}])
+        self.assertEqual(menu.identities_from_env({'MYMRS_TOKEN': 'jeton'}), [{'token': 'jeton'}])
+
+    def test_password_hex(self):
+        password = '#é$"\'%+ x'
+        env = {'MYMRS_LOGIN': 'a@b.fr', 'MYMRS_PASSWORD_HEX': password.encode().hex() + '\n'}
+        self.assertEqual(menu.identities_from_env(env), [{'login': 'a@b.fr', 'password': password}])
+        # Le hexadécimal l'emporte sur MYMRS_PASSWORD.
+        env['MYMRS_PASSWORD'] = 'autre'
+        self.assertEqual(menu.identities_from_env(env)[0]['password'], password)
+        with self.assertRaises(menu.MenuError) as caught:
+            menu.identities_from_env({'MYMRS_LOGIN': 'a', 'MYMRS_PASSWORD_HEX': 'zz-secret'})
+        self.assertNotIn('zz-secret', str(caught.exception))
 
     def test_real_shape_dates_descending(self):
         # Forme observée dans un export réel de l'appli : jours dans l'ordre décroissant, plats avec identifiants.

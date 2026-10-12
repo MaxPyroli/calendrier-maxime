@@ -38,6 +38,7 @@ jobs:
       MYMRS_TOKEN: ${{ secrets.MYMRS_TOKEN }}
       MYMRS_LOGIN: ${{ secrets.MYMRS_LOGIN }}
       MYMRS_PASSWORD: ${{ secrets.MYMRS_PASSWORD }}
+      MYMRS_PASSWORD_HEX: ${{ secrets.MYMRS_PASSWORD_HEX }}
     steps:
       - uses: actions/checkout@v4
 

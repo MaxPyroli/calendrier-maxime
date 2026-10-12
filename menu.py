@@ -1,7 +1,8 @@
 """Récupère le menu de la cantine myMRS et produit une page autonome (menu.html). Python 3.11+.
 
-Accès lu dans MYMRS_TOKEN (jeton de l'appli) ou dans MYMRS_LOGIN et MYMRS_PASSWORD ; ils ne sont
-jamais écrits ni affichés.
+Accès lu dans MYMRS_LOGIN + MYMRS_PASSWORD (ou MYMRS_PASSWORD_HEX : le mot de passe écrit en hexadécimal,
+utile s'il commence par un caractère spécial) ou, à défaut, dans MYMRS_TOKEN (jeton de l'appli, qui peut
+expirer). Rien n'est jamais écrit ni affiché.
 Seuls les plats sont publiés : aucune donnée de compte (nom, solde, badge) n'est conservée.
 """
 import argparse
@@ -89,12 +90,18 @@ def open_session(identity, opener=urlopen):
 
 
 def identities_from_env(environ=os.environ):
-    """Accès possibles, dans l'ordre d'essai : jeton de l'appli, puis identifiant + mot de passe."""
+    """Accès possibles, dans l'ordre d'essai : identifiant + mot de passe (durable), puis jeton de l'appli."""
     found = []
+    password = environ.get('MYMRS_PASSWORD')
+    if environ.get('MYMRS_PASSWORD_HEX', '').strip():
+        try:
+            password = bytes.fromhex(environ['MYMRS_PASSWORD_HEX'].strip()).decode('utf-8')
+        except ValueError:
+            raise MenuError('MYMRS_PASSWORD_HEX invalide : uniquement des chiffres et lettres a-f') from None
+    if environ.get('MYMRS_LOGIN') and password:
+        found.append({'login': environ['MYMRS_LOGIN'], 'password': password})
     if environ.get('MYMRS_TOKEN', '').strip():
         found.append({'token': environ['MYMRS_TOKEN'].strip()})
-    if environ.get('MYMRS_LOGIN') and environ.get('MYMRS_PASSWORD'):
-        found.append({'login': environ['MYMRS_LOGIN'], 'password': environ['MYMRS_PASSWORD']})
     return found
 
 
@@ -222,9 +229,12 @@ def main():
     parser.add_argument('--output', type=Path, default=ROOT / 'menu.html')
     parser.add_argument('--diagnostic', action='store_true', help='affiche la forme des réponses, ne publie rien')
     args = parser.parse_args()
-    identities = identities_from_env()
+    try:
+        identities = identities_from_env()
+    except MenuError as error:
+        sys.exit(f'Erreur : {error}')
     if not identities:
-        sys.exit('Erreur : définir MYMRS_TOKEN, ou MYMRS_LOGIN et MYMRS_PASSWORD.')
+        sys.exit('Erreur : définir MYMRS_LOGIN + MYMRS_PASSWORD (ou MYMRS_PASSWORD_HEX), ou MYMRS_TOKEN.')
     now = datetime.now(PARIS)
     if args.diagnostic:
         try:

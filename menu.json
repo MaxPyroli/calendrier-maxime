@@ -1,0 +1,152 @@
+{
+ "days": [
+  {
+   "date": "2026-10-12",
+   "restaurants": [
+    {
+     "name": "Restaurant Principal",
+     "items": [
+      {
+       "type": "Saine Attitude",
+       "label": "Féta rôti aux légumes du soleil"
+      },
+      {
+       "type": "Le Marché",
+       "label": "Semaine du goût : Dos de cabillaud rôti au beurre salé"
+      },
+      {
+       "type": "BBQ & Co",
+       "label": "steak haché"
+      },
+      {
+       "type": "Trattoria",
+       "label": "Boulettes de lentilles"
+      },
+      {
+       "type": "Bistronomie",
+       "label": "Navarin d'agneau"
+      },
+      {
+       "type": "Les Comptoirs",
+       "label": "Cuisse de lapin aux olives taggiasche"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "date": "2026-10-13",
+   "restaurants": [
+    {
+     "name": "Restaurant Principal",
+     "items": [
+      {
+       "type": "Saine Attitude",
+       "label": "Quiche au bacon végétal"
+      },
+      {
+       "type": "Le Marché",
+       "label": "Pavé de colin d'Alaska à la crème de citron"
+      },
+      {
+       "type": "BBQ & Co",
+       "label": "Paupiette de veau à la Normande"
+      },
+      {
+       "type": "Trattoria",
+       "label": "Knack végétale"
+      },
+      {
+       "type": "Bistronomie",
+       "label": "Semaine du goût : Poulet jaune à la moutarde à l'ancienne"
+      },
+      {
+       "type": "Les Comptoirs",
+       "label": "Filet mignon de porc laqué"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "date": "2026-10-14",
+   "restaurants": [
+    {
+     "name": "Restaurant Principal",
+     "items": [
+      {
+       "type": "Saine Attitude",
+       "label": "Pâtes farcies : Agnoloni 4 fromages"
+      },
+      {
+       "type": "Le Marché",
+       "label": "Dos de lieu noir, aïoli légère"
+      },
+      {
+       "type": "BBQ & Co",
+       "label": "Entrecôte à la moutarde"
+      },
+      {
+       "type": "Bistronomie",
+       "label": "Semaine du goût : Saucisse de Montbéliard, sauce au porto"
+      },
+      {
+       "type": "Les Comptoirs",
+       "label": "Escalope de dinde aux champignons"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "date": "2026-10-15",
+   "restaurants": [
+    {
+     "name": "Restaurant Principal",
+     "items": [
+      {
+       "type": "Saine Attitude",
+       "label": "Brouillade d'oeufs aux poivrons"
+      },
+      {
+       "type": "Le Marché",
+       "label": "Pavé de saumon au beurre Nantais"
+      },
+      {
+       "type": "BBQ & Co",
+       "label": "Haché de veau au poivre"
+      },
+      {
+       "type": "Bistronomie",
+       "label": "Semaine du goût : Boeuf Bourguignon revisité en parmentier, jus réduit"
+      },
+      {
+       "type": "Les Comptoirs",
+       "label": "Jambon rôti au Madère"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "date": "2026-10-16",
+   "restaurants": [
+    {
+     "name": "Restaurant Principal",
+     "items": [
+      {
+       "type": "Saine Attitude",
+       "label": "Pizza aux 4 fromages"
+      },
+      {
+       "type": "Trattoria",
+       "label": "Friday Lunch"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "updated": "12/10/2026 à 10:47",
+ "updatedAt": "2026-10-12T10:47+02:00"
+}

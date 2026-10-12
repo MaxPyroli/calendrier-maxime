@@ -24,10 +24,11 @@ button:hover:not(:disabled){background:#e8f1ee}button:disabled{opacity:.35;curso
 .next{margin-top:14px}.next summary{cursor:pointer;padding:6px 0 10px;font-size:13px;font-weight:700;color:#5d7a73}
 .next .card{background:rgba(255,255,255,.6)}
 footer{margin-top:16px;font-size:12px;color:#5d7a73}footer a{color:inherit}
+.warn{margin:0 0 12px;padding:9px 12px;border-radius:12px;background:#fdeccd;color:#8a5a00;font-size:12.5px;line-height:1.4}
 </style></head><body><main>
 <header><div class="eyebrow">🍴 Cantine</div>
 <nav aria-label="Choisir un jour"><button id="prev" aria-label="Jour précédent">←</button><button id="today">Aujourd’hui</button><button id="next" aria-label="Jour suivant">→</button></nav><h1 id="title"></h1></header>
-<div id="menu" aria-live="polite"></div><div id="after" class="next"></div>
+<div id="alert"></div><div id="menu" aria-live="polite"></div><div id="after" class="next"></div>
 <footer id="footer"></footer>
 </main><script type="application/json" id="data">__MENU_DATA__</script><script>
 'use strict';
@@ -97,6 +98,8 @@ function show(){
 $('prev').onclick=()=>{index=Math.max(0,index-1);show();};
 $('next').onclick=()=>{index=Math.min(days.length-1,index+1);show();};
 $('today').onclick=()=>{const t=days.findIndex(d=>d.date>=key(new Date()));index=t<0?days.length-1:t;show();};
+const age=data.updatedAt?(Date.now()-new Date(data.updatedAt).getTime())/36e5:0;
+if(age>36){const d=Math.floor(age/24);$('alert').append(node('p','⚠️ Menu non actualisé depuis '+d+' jour'+(d>1?'s':'')+' : la connexion à myMRS a échoué. Le dernier menu connu est affiché.','warn'));}
 const footer=$('footer');footer.append('🔄 Mis à jour le '+data.updated+' · ');
 const link=node('a','myMRS');link.href='https://www.mymrs.fr/home';link.target='_blank';link.rel='noopener';footer.append(link);
 show();

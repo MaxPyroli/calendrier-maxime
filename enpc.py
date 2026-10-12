@@ -79,6 +79,7 @@ class Rooms:
         self.pause = pause
         self.pages = {}
         self.failed = False
+        self.found = 0
 
     def day(self, day):
         if day not in self.pages:
@@ -107,4 +108,5 @@ class Rooms:
         if start.date() < self.today - timedelta(days=1):
             return ''  # inutile de relire le passé à chaque génération
         found = rooms_for(self.day(start.date()), match.group(1), start, end)
+        self.found += bool(found)
         return ' · '.join(found)

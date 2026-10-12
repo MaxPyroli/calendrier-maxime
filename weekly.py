@@ -62,13 +62,15 @@ def main():
     args = parser.parse_args()
     rules = Rules(json.loads((ROOT / 'rules.json').read_text(encoding='utf-8')))
     raw = args.input.read_bytes() if args.input else download(SOURCE)
-    page, audit = generate(raw, rules, args.week, None if args.no_rooms else Rooms())
+    lookup = None if args.no_rooms else Rooms()
+    page, audit = generate(raw, rules, args.week, lookup)
     atomic_write(ROOT / 'audit.json', json.dumps(audit, ensure_ascii=False, indent=2).encode('utf-8'))
     if not any(r['kept'] for r in audit):
         raise ValueError('Aucun événement retenu dans la source : publication bloquée')
     atomic_write(args.output, page.encode('utf-8'))
     print(json.dumps({'total': len(audit), 'kept': sum(r['kept'] for r in audit),
-                      'unknown': sum(r['classification'] == 'unknown' for r in audit)}))
+                      'unknown': sum(r['classification'] == 'unknown' for r in audit),
+                      'salles_enpc': getattr(lookup, 'found', None), 'enpc_injoignable': getattr(lookup, 'failed', None)}))
 
 
 if __name__ == '__main__':

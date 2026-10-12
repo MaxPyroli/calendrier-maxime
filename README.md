@@ -41,6 +41,17 @@ python weekly.py --input source.ics --week 2026-10-05
 
 La page contient 25 semaines : douze avant et douze après la semaine choisie. Les flèches et le sélecteur naviguent dans cette période. À l'ouverture, la page affiche directement la semaine en cours et défile jusqu'au jour actuel (le lundi, premier jour de la semaine, elle reste en haut) ; la semaine choisie à la génération n'est qu'un repère pour la plage de 25 semaines. Le bouton « Cette semaine » fait de même et, dans une ancienne copie dont la plage ne contient plus aujourd'hui, revient à la limite disponible sans défiler. Le fichier local est un instantané ; la version hébergée est reconstruite automatiquement. Recharger la page pour voir une nouvelle génération.
 
+## Menu de la cantine (myMRS)
+
+`menu.py` se connecte à myMRS avec les secrets `MYMRS_LOGIN` et `MYMRS_PASSWORD` (Settings → Secrets and variables → Actions), récupère le planning des repas et produit `menu.html`, une page étroite prévue pour être intégrée dans Notion. Seuls les plats sont publiés : ni nom, ni solde, ni badge. L'étape du workflow est facultative : sans secrets ou en cas d'échec, le calendrier est publié normalement et le dernier menu en ligne reste en place.
+
+```sh
+export MYMRS_LOGIN=... MYMRS_PASSWORD=...
+python menu.py
+```
+
+Les formes de réponse sont déduites du code public de l'appli ; `tests/test_menu.py` les vérifie avec des données factices.
+
 ## Filtrage et limites explicites
 
 Correction du 29/09/2026 fondée sur le livret M2 TRAME 2026–2027 fourni : les UE obligatoires « Réseaux et territoires » (p. 5), « Transitions socio-écologiques et environnementales » (p. 6), « Planification, gouvernance, politiques et action publique » (p. 7) et « Usages, usagers, pratiques sociales » (p. 8) sont reconnues explicitement, en plus des enjeux et controverses déjà couverts. Les intitulés de professionnalisation (p. 39) sont également reconnus. Les intitulés abrégés exacts « Transition » et « Transitions » sont rattachés à l'UE commune ; « High tech / low tech » est rattaché au cours RIS et exclu. Les choix personnels d'options restent ceux indiqués par Maxime, même lorsqu'un cours non choisi figure au catalogue TM. Aucun numéro UE seul n'autorise un événement : ces numéros se répètent entre blocs.

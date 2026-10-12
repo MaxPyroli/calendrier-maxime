@@ -11,6 +11,8 @@ on:
       - weekly.py
       - filter_calendar.py
       - rules.json
+      - menu.py
+      - template_menu.html
       - requirements.txt
       - tests/**
       - .github/workflows/calendar.yml
@@ -27,6 +29,9 @@ concurrency:
 jobs:
   actualiser:
     runs-on: ubuntu-latest
+    env:
+      MYMRS_LOGIN: ${{ secrets.MYMRS_LOGIN }}
+      MYMRS_PASSWORD: ${{ secrets.MYMRS_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
 
@@ -46,11 +51,19 @@ jobs:
       - name: Générer la page
         run: python weekly.py
 
+      # Menu de la cantine (myMRS). Étape facultative : sans secrets, ou en cas d'échec,
+      # le calendrier est publié quand même et le dernier menu en ligne reste en place.
+      - name: Générer le menu de la cantine
+        if: ${{ env.MYMRS_LOGIN != '' }}
+        continue-on-error: true
+        run: python menu.py
+
       - name: Publier si la page a changé
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html audit.json
+          if [ -f menu.html ]; then git add menu.html; fi
           if git diff --cached --quiet; then
             echo "Aucun changement à publier."
             exit 0

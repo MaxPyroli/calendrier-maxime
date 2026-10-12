@@ -8,6 +8,7 @@ from zoneinfo import ZoneInfo
 from icalendar import Calendar
 import recurring_ical_events
 
+from enpc import Rooms
 from filter_calendar import ROOT, SOURCE, Rules, atomic_write, download, filter_ics
 
 PARIS = ZoneInfo('Europe/Paris')
@@ -19,7 +20,7 @@ def local(value):
     return datetime.combine(value, time.min, PARIS)
 
 
-def generate(raw, rules, anchor):
+def generate(raw, rules, anchor, room_lookup=None):
     encoded, audit = filter_ics(raw, rules)
     monday = anchor - timedelta(days=anchor.weekday())
     start, end = monday - timedelta(weeks=12), monday + timedelta(weeks=13)
@@ -38,6 +39,9 @@ def generate(raw, rules, anchor):
                        'start': local(begin).isoformat(), 'end': local(finish).isoformat(),
                        'allDay': all_day})
     events.sort(key=lambda e: (e['start'], e['end'], e['title']))
+    if room_lookup:  # salles des cours donnés à l'ENPC (voir enpc.py) ; jamais bloquant
+        for event in events:
+            event['room'] = room_lookup(event)
     data = {'events': events, 'monday': monday.isoformat(), 'first': start.isoformat(),
             'last': (end - timedelta(weeks=1)).isoformat(),
             'updated': datetime.now(PARIS).strftime('%d/%m/%Y à %H:%M'),
@@ -54,10 +58,11 @@ def main():
     parser.add_argument('--input', type=Path)
     parser.add_argument('--week', type=date.fromisoformat, default=datetime.now(PARIS).date())
     parser.add_argument('--output', type=Path, default=ROOT / 'index.html')
+    parser.add_argument('--no-rooms', action='store_true', help="ne pas interroger l'emploi du temps de l'ENPC")
     args = parser.parse_args()
     rules = Rules(json.loads((ROOT / 'rules.json').read_text(encoding='utf-8')))
     raw = args.input.read_bytes() if args.input else download(SOURCE)
-    page, audit = generate(raw, rules, args.week)
+    page, audit = generate(raw, rules, args.week, None if args.no_rooms else Rooms())
     atomic_write(ROOT / 'audit.json', json.dumps(audit, ensure_ascii=False, indent=2).encode('utf-8'))
     if not any(r['kept'] for r in audit):
         raise ValueError('Aucun événement retenu dans la source : publication bloquée')

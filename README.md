@@ -1,6 +1,6 @@
 # Ma semaine TRAME — Maxime
 
-Le résultat principal est **une page hebdomadaire**, conformément à la demande précisée : cours par jour, horaires de Paris et navigation entre semaines. Les salles ne sont pas affichées. Aucun abonnement iCal n'est nécessaire. La page HTML fonctionne aussi en ouvrant le fichier localement.
+Le résultat principal est **une page hebdomadaire**, conformément à la demande précisée : cours par jour, horaires de Paris et navigation entre semaines. Les salles ne sont pas affichées, sauf pour les cours donnés à l'ENPC (intitulé « (ENPC) », par exemple ACOST et MASYT) : `enpc.py` lit leur salle sur [l'emploi du temps de l'ENPC](https://emploidutemps.enpc.fr/) à chaque génération. Si plusieurs salles sont listées pour un même créneau (groupes), toutes sont affichées. Si le site est injoignable, la page est publiée sans salle. Aucun abonnement iCal n'est nécessaire. La page HTML fonctionne aussi en ouvrant le fichier localement.
 
 Chaque journée avec horaires précis affiche un fin repère coloré pour le début et la fin des cours. Un repère ocre « Pause déjeuner » indique seulement la durée libre autour de midi. Il est calculé à partir des cours affichés : ce n'est pas une pause officielle. Pour un atelier continu, aucune pause n'est inventée et une mention signale l'absence de précision.
 

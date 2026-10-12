@@ -1,3 +1,5 @@
+import contextlib
+import io
 import json
 import unittest
 from datetime import date, datetime
@@ -79,6 +81,25 @@ class MenuTests(unittest.TestCase):
             menu.connect('a', 'b', lambda r, timeout: FakeResponse(b'<html>maintenance</html>'))
         site_id, _ = menu.connect('a', 'b', lambda r, timeout: FakeResponse(b'//{"success": "YES", "mesinfos": {"messite": [{"siteid": 3}]}}'))
         self.assertEqual(site_id, 3)
+
+    def test_diagnostic_hides_personal_values(self):
+        def opener(request, timeout):
+            if 'getConnexion' in request.full_url:
+                body = {'SUCCESS': True, 'TOKEN': 'jeton-secret', 'MONPLANNING': PLANNING_LOGIN,
+                        'MESINFOS': {'NOM': 'Dupont', 'MESSITE': [{'SITEID': 7, 'SITELIBELLE': 'Site'}]}}
+            else:
+                body = {'SUCCESS': True, 'DATA': PLANNING_SITE}
+            return FakeResponse(json.dumps(body).encode())
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            menu.diagnostic('a@b.fr', 'motdepasse-secret', date(2026, 10, 13), opener)
+        text = out.getvalue()
+        for secret in ['Dupont', 'jeton-secret', 'motdepasse-secret', 'a@b.fr']:
+            self.assertNotIn(secret, text)
+        report = json.loads(text)
+        self.assertIn('NOM', report['MESINFOS'])
+        self.assertIn('PROGRAMME', report['MONPLANNING'][1])
+        self.assertIn('semaine suivante', report)
 
 
 if __name__ == '__main__': unittest.main()

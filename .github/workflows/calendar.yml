@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: '17 */6 * * *'
   workflow_dispatch:
+    inputs:
+      essai:
+        description: "Essai du menu : affiche la forme des réponses myMRS et le menu, ne publie rien"
+        type: boolean
+        default: false
   push:
     branches: [main]
     paths:
@@ -54,11 +59,31 @@ jobs:
       # Menu de la cantine (myMRS). Étape facultative : sans secrets, ou en cas d'échec,
       # le calendrier est publié quand même et le dernier menu en ligne reste en place.
       - name: Générer le menu de la cantine
-        if: ${{ env.MYMRS_LOGIN != '' }}
+        if: ${{ env.MYMRS_LOGIN != '' && !inputs.essai }}
         continue-on-error: true
         run: python menu.py
 
+      # Lancement manuel avec « essai » : montre ce que myMRS renvoie (sans données personnelles)
+      # puis le menu obtenu, et s'arrête là sans rien publier.
+      - name: Essai du menu (rien n'est publié)
+        if: ${{ inputs.essai }}
+        run: |
+          python menu.py --diagnostic
+          python menu.py --output "$RUNNER_TEMP/menu.html"
+          python - <<'PY'
+          import json, os
+          page = open(os.path.join(os.environ['RUNNER_TEMP'], 'menu.html'), encoding='utf-8').read()
+          data = json.loads(page.split('id="data">')[1].split('</script>')[0])
+          for day in data['days']:
+              print(day['date'])
+              for restaurant in day['restaurants']:
+                  print('  ', restaurant['name'])
+                  for item in restaurant['items']:
+                      print('     ', item['type'], ':', item['label'])
+          PY
+
       - name: Publier si la page a changé
+        if: ${{ !inputs.essai }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

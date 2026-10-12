@@ -160,14 +160,55 @@ def render(data):
     return (ROOT / 'template_menu.html').read_text(encoding='utf-8').replace('__MENU_DATA__', payload)
 
 
+def shape(value, depth=0):
+    """Squelette d'une réponse (clés, types, longueurs) pour vérifier sa forme sans rien deviner."""
+    if isinstance(value, dict):
+        return '{…}' if depth >= 5 else {str(k): shape(v, depth + 1) for k, v in list(value.items())[:12]}
+    if isinstance(value, list):
+        return [f'{len(value)} éléments'] + ([shape(value[0], depth + 1)] if value else [])
+    if isinstance(value, str):
+        return 'texte:' + value[:40]
+    return f'{type(value).__name__}:{str(value)[:20]}'
+
+
+def keys_only(value):
+    return sorted(map(str, value)) if isinstance(value, dict) else type(value).__name__
+
+
+def diagnostic(login, password, today, opener=urlopen):
+    """Affiche la forme des réponses. Les données personnelles (MESINFOS, jeton) n'y figurent jamais :
+    seulement leurs noms de champs."""
+    data = call(LOGIN, {'login': login, 'password': password, 'device': DEVICE}, opener)
+    infos = pick(data, 'MESINFOS')
+    sites = pick(infos, 'MESSITE') or []
+    report = {'connexion': {'clés': keys_only(data), 'SUCCESS': pick(data, 'SUCCESS')},
+              'MESINFOS': keys_only(infos),
+              'MESSITE[0]': keys_only(sites[0]) if sites else 'aucun site',
+              'MONPLANNING': shape(pick(data, 'MONPLANNING'))}
+    site_id = pick(sites[0], 'SITEID') if sites else None
+    if site_id is not None:
+        friday = today - timedelta(days=today.weekday()) + timedelta(days=11)
+        extra = call(PLANNING, {'monSite': site_id, 'dateLimit': f'{friday.year}-{friday.month}-{friday.day}'}, opener)
+        report['semaine suivante'] = {'clés': keys_only(extra), 'SUCCESS': pick(extra, 'SUCCESS'),
+                                      'DATA': shape(pick(extra, 'DATA'))}
+    print(json.dumps(report, ensure_ascii=False, indent=1))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, default=ROOT / 'menu.html')
+    parser.add_argument('--diagnostic', action='store_true', help='affiche la forme des réponses, ne publie rien')
     args = parser.parse_args()
     login, password = os.environ.get('MYMRS_LOGIN'), os.environ.get('MYMRS_PASSWORD')
     if not login or not password:
         sys.exit('Erreur : MYMRS_LOGIN et MYMRS_PASSWORD doivent être définis.')
     now = datetime.now(PARIS)
+    if args.diagnostic:
+        try:
+            diagnostic(login, password, now.date())
+        except MenuError as error:
+            sys.exit(f'Erreur : {error}')
+        return
     try:
         site_id, planning = connect(login, password)
         extra = None

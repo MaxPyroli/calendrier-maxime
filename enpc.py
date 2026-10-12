@@ -87,11 +87,13 @@ class Rooms:
         return self.pages[day]
 
     def _download(self, day):
+        if self.failed:  # site hors service : inutile d'attendre un délai pour chaque jour
+            return []
         url = f'{BASE}?code_departement=&mydate={quote(day.strftime("%d/%m/%Y"))}'
         request = Request(url, headers={'User-Agent': 'calendrier-maxime (agenda personnel M2 TRAME)'})
         try:
             time.sleep(self.pause)
-            with self.opener(request, timeout=20) as response:
+            with self.opener(request, timeout=10) as response:
                 return parse_rows(response.read().decode('utf-8', 'replace'))
         except (URLError, TimeoutError, OSError):
             if not self.failed:

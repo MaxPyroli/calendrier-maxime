@@ -72,6 +72,16 @@ class EnpcTests(unittest.TestCase):
         self.assertEqual(rooms(event('ACOST (ENPC)', '2026-10-14T12:30:00+02:00', '2026-10-14T15:30:00+02:00')), '')
         self.assertTrue(rooms.failed)
 
+    def test_after_a_failure_other_days_are_not_requested(self):
+        calls = []
+        def down(request, timeout):
+            calls.append(request.full_url)
+            raise URLError('délai dépassé')
+        rooms = enpc.Rooms(today=date(2026, 10, 12), opener=down, pause=0)
+        for day in ('14', '21', '28'):
+            rooms(event('MASYT (ENPC)', f'2026-10-{day}T12:30:00+02:00', f'2026-10-{day}T15:30:00+02:00'))
+        self.assertEqual(len(calls), 1)
+
     def test_generate_adds_room_field(self):
         from filter_calendar import ROOT, Rules
         from weekly import generate

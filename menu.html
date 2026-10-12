@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Menu de la cantine</title>
+<style>
+:root{font-family:system-ui,sans-serif;color:#172e32;background:#f3f5f2}*{box-sizing:border-box}body{margin:0}
+main{max-width:460px;margin:auto;padding:20px 16px 28px}
+.eyebrow{font-size:11px;letter-spacing:2px;font-weight:700;color:#397266;text-transform:uppercase}
+header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 10px;margin-bottom:14px}
+h1{flex:1 0 100%;order:3;margin:0;font-size:21px;line-height:1.25}
+nav{display:flex;gap:6px}
+button{font:inherit;font-size:14px;min-width:34px;height:34px;padding:0 10px;border:1px solid #c8d6d0;border-radius:10px;background:#fff;color:#173f42;cursor:pointer}
+button:hover:not(:disabled){background:#e8f1ee}button:disabled{opacity:.35;cursor:default}
+.card{margin:0 0 12px;padding:14px 16px;border:1px solid #d9e4df;border-radius:14px;background:#fff}
+.card h2{margin:0 0 8px;font-size:12px;letter-spacing:1.2px;text-transform:uppercase;color:#397266}
+.dish{display:flex;flex-direction:column;gap:1px;padding:7px 0;border-top:1px solid #edf2ef}
+.dish:first-of-type{border-top:0;padding-top:0}
+.type{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:#6f8f87}
+.label{font-size:15px;line-height:1.35}
+.next{margin-top:14px}.next summary{cursor:pointer;padding:6px 0 10px;font-size:13px;font-weight:700;color:#5d7a73}
+.next .card{background:rgba(255,255,255,.6)}
+.empty,footer{font-size:12px;color:#5d7a73}footer{margin-top:16px}footer a{color:inherit}
+</style></head><body><main>
+<header><div class="eyebrow">Cantine</div>
+<nav aria-label="Choisir un jour"><button id="prev" aria-label="Jour précédent">←</button><button id="today">Aujourd’hui</button><button id="next" aria-label="Jour suivant">→</button></nav><h1 id="title"></h1></header>
+<div id="menu" aria-live="polite"></div><div id="after" class="next"></div>
+<footer id="footer"></footer>
+</main><script type="application/json" id="data">{"days": [{"date": "2026-10-12", "restaurants": [{"name": "Restaurant Principal", "items": [{"type": "Saine Attitude", "label": "Féta rôti aux légumes du soleil"}, {"type": "Le Marché", "label": "Semaine du goût : Dos de cabillaud rôti au beurre salé"}, {"type": "BBQ \u0026 Co", "label": "steak haché"}, {"type": "Trattoria", "label": "Boulettes de lentilles"}, {"type": "Bistronomie", "label": "Navarin d'agneau"}, {"type": "Les Comptoirs", "label": "Cuisse de lapin aux olives taggiasche"}]}]}, {"date": "2026-10-13", "restaurants": [{"name": "Restaurant Principal", "items": [{"type": "Saine Attitude", "label": "Quiche au bacon végétal"}, {"type": "Le Marché", "label": "Pavé de colin d'Alaska à la crème de citron"}, {"type": "BBQ \u0026 Co", "label": "Paupiette de veau à la Normande"}, {"type": "Trattoria", "label": "Knack végétale"}, {"type": "Bistronomie", "label": "Semaine du goût : Poulet jaune à la moutarde à l'ancienne"}, {"type": "Les Comptoirs", "label": "Filet mignon de porc laqué"}]}]}, {"date": "2026-10-14", "restaurants": [{"name": "Restaurant Principal", "items": [{"type": "Saine Attitude", "label": "Pâtes farcies : Agnoloni 4 fromages"}, {"type": "Le Marché", "label": "Dos de lieu noir, aïoli légère"}, {"type": "BBQ \u0026 Co", "label": "Entrecôte à la moutarde"}, {"type": "Bistronomie", "label": "Semaine du goût : Saucisse de Montbéliard, sauce au porto"}, {"type": "Les Comptoirs", "label": "Escalope de dinde aux champignons"}]}]}, {"date": "2026-10-15", "restaurants": [{"name": "Restaurant Principal", "items": [{"type": "Saine Attitude", "label": "Brouillade d'oeufs aux poivrons"}, {"type": "Le Marché", "label": "Pavé de saumon au beurre Nantais"}, {"type": "BBQ \u0026 Co", "label": "Haché de veau au poivre"}, {"type": "Bistronomie", "label": "\"Semaine du goût : Boeuf Bourguignon revisité en parmentier, jus réduit"}, {"type": "Les Comptoirs", "label": "Jambon rôti au Madère"}]}]}, {"date": "2026-10-16", "restaurants": [{"name": "Restaurant Principal", "items": [{"type": "Saine Attitude", "label": "Pizza aux 4 fromages"}, {"type": "Trattoria", "label": "Friday Lunch"}]}]}], "updated": "12/10/2026 à 10:22"}</script><script>
+'use strict';
+const data=JSON.parse(document.getElementById('data').textContent), days=data.days, $=id=>document.getElementById(id);
+const key=d=>new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Paris',year:'numeric',month:'2-digit',day:'2-digit'}).format(d);
+const label=new Intl.DateTimeFormat('fr-FR',{weekday:'long',day:'numeric',month:'long',timeZone:'UTC'});
+const at=s=>new Date(s+'T12:00:00Z');
+function node(tag,text,cls){const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;}
+const cap=t=>t.charAt(0).toUpperCase()+t.slice(1);
+function nameOf(dateKey,todayKey){
+ const plus=n=>key(new Date(at(todayKey).getTime()+n*86400000));
+ if(dateKey===todayKey)return 'Aujourd’hui · '+label.format(at(dateKey));
+ if(dateKey===plus(1))return 'Demain · '+label.format(at(dateKey));
+ return cap(label.format(at(dateKey)));
+}
+function cards(day){
+ const frag=document.createDocumentFragment();
+ for(const r of day.restaurants){
+  const card=node('section','','card');card.append(node('h2',r.name));
+  for(const item of r.items){
+   const row=node('div','','dish');
+   if(item.type)row.append(node('span',item.type,'type'));
+   row.append(node('span',item.label,'label'));card.append(row);
+  }
+  frag.append(card);
+ }
+ return frag;
+}
+let index=Math.max(0,days.findIndex(d=>d.date>=key(new Date())));
+if(!days.some(d=>d.date>=key(new Date())))index=days.length-1;
+function show(){
+ const todayKey=key(new Date()), day=days[index];
+ $('title').textContent=nameOf(day.date,todayKey);
+ $('menu').replaceChildren(cards(day));
+ $('after').replaceChildren();
+ const upcoming=days[index+1];
+ if(upcoming&&day.date>=todayKey){
+  const more=node('details');more.append(node('summary',nameOf(upcoming.date,todayKey)),cards(upcoming));$('after').append(more);
+ }
+ $('prev').disabled=index<=0;$('next').disabled=index>=days.length-1;
+}
+$('prev').onclick=()=>{index=Math.max(0,index-1);show();};
+$('next').onclick=()=>{index=Math.min(days.length-1,index+1);show();};
+$('today').onclick=()=>{const t=days.findIndex(d=>d.date>=key(new Date()));index=t<0?days.length-1:t;show();};
+const footer=$('footer');footer.append('Mis à jour le '+data.updated+' · ');
+const link=node('a','myMRS');link.href='https://www.mymrs.fr/home';link.target='_blank';link.rel='noopener';footer.append(link);
+show();
+</script></body></html>

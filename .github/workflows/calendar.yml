@@ -35,6 +35,7 @@ jobs:
   actualiser:
     runs-on: ubuntu-latest
     env:
+      MYMRS_TOKEN: ${{ secrets.MYMRS_TOKEN }}
       MYMRS_LOGIN: ${{ secrets.MYMRS_LOGIN }}
       MYMRS_PASSWORD: ${{ secrets.MYMRS_PASSWORD }}
     steps:
@@ -59,7 +60,7 @@ jobs:
       # Menu de la cantine (myMRS). Étape facultative : sans secrets, ou en cas d'échec,
       # le calendrier est publié quand même et le dernier menu en ligne reste en place.
       - name: Générer le menu de la cantine
-        if: ${{ env.MYMRS_LOGIN != '' && !inputs.essai }}
+        if: ${{ (env.MYMRS_TOKEN != '' || env.MYMRS_LOGIN != '') && !inputs.essai }}
         continue-on-error: true
         run: python menu.py
 

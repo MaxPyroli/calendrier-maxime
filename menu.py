@@ -1,6 +1,7 @@
 """Récupère le menu de la cantine myMRS et produit une page autonome (menu.html). Python 3.11+.
 
-Identifiants lus dans MYMRS_LOGIN et MYMRS_PASSWORD ; ils ne sont jamais écrits ni affichés.
+Accès lu dans MYMRS_TOKEN (jeton de l'appli) ou dans MYMRS_LOGIN et MYMRS_PASSWORD ; ils ne sont
+jamais écrits ni affichés.
 Seuls les plats sont publiés : aucune donnée de compte (nom, solde, badge) n'est conservée.
 """
 import argparse
@@ -69,12 +70,32 @@ def truthy(value):
 
 
 def connect(login, password, opener=urlopen):
-    data = call(LOGIN, {'login': login, 'password': password, 'device': DEVICE}, opener)
+    return open_session({'login': login, 'password': password}, opener)
+
+
+def connect_token(token, opener=urlopen):
+    return open_session({'token': token}, opener)
+
+
+def open_session(identity, opener=urlopen):
+    data = call(LOGIN, {**identity, 'device': DEVICE}, opener)
     if not truthy(pick(data, 'SUCCESS')):
+        if 'token' in identity:
+            raise MenuError('Jeton refusé ou expiré par myMRS : en récupérer un nouveau (MYMRS_TOKEN)')
         raise MenuError('Connexion refusée par myMRS : vérifier MYMRS_LOGIN et MYMRS_PASSWORD')
     sites = pick(pick(data, 'MESINFOS'), 'MESSITE') or []
     site_id = pick(sites[0], 'SITEID') if sites else None
     return site_id, pick(data, 'MONPLANNING')
+
+
+def identities_from_env(environ=os.environ):
+    """Accès possibles, dans l'ordre d'essai : jeton de l'appli, puis identifiant + mot de passe."""
+    found = []
+    if environ.get('MYMRS_TOKEN', '').strip():
+        found.append({'token': environ['MYMRS_TOKEN'].strip()})
+    if environ.get('MYMRS_LOGIN') and environ.get('MYMRS_PASSWORD'):
+        found.append({'login': environ['MYMRS_LOGIN'], 'password': environ['MYMRS_PASSWORD']})
+    return found
 
 
 def next_week_planning(site_id, today, opener=urlopen):
@@ -175,10 +196,10 @@ def keys_only(value):
     return sorted(map(str, value)) if isinstance(value, dict) else type(value).__name__
 
 
-def diagnostic(login, password, today, opener=urlopen):
+def diagnostic(identity, today, opener=urlopen):
     """Affiche la forme des réponses. Les données personnelles (MESINFOS, jeton) n'y figurent jamais :
     seulement leurs noms de champs."""
-    data = call(LOGIN, {'login': login, 'password': password, 'device': DEVICE}, opener)
+    data = call(LOGIN, {**identity, 'device': DEVICE}, opener)
     infos = pick(data, 'MESINFOS')
     sites = pick(infos, 'MESSITE') or []
     report = {'connexion': {'clés': keys_only(data), 'SUCCESS': pick(data, 'SUCCESS')},
@@ -199,18 +220,26 @@ def main():
     parser.add_argument('--output', type=Path, default=ROOT / 'menu.html')
     parser.add_argument('--diagnostic', action='store_true', help='affiche la forme des réponses, ne publie rien')
     args = parser.parse_args()
-    login, password = os.environ.get('MYMRS_LOGIN'), os.environ.get('MYMRS_PASSWORD')
-    if not login or not password:
-        sys.exit('Erreur : MYMRS_LOGIN et MYMRS_PASSWORD doivent être définis.')
+    identities = identities_from_env()
+    if not identities:
+        sys.exit('Erreur : définir MYMRS_TOKEN, ou MYMRS_LOGIN et MYMRS_PASSWORD.')
     now = datetime.now(PARIS)
     if args.diagnostic:
         try:
-            diagnostic(login, password, now.date())
+            diagnostic(identities[0], now.date())
         except MenuError as error:
             sys.exit(f'Erreur : {error}')
         return
     try:
-        site_id, planning = connect(login, password)
+        site_id = planning = None
+        for position, identity in enumerate(identities):
+            try:
+                site_id, planning = open_session(identity)
+                break
+            except MenuError as error:
+                if position == len(identities) - 1:
+                    raise
+                print(f'Avertissement : {error} ; essai avec l\'accès suivant', file=sys.stderr)
         extra = None
         if site_id is not None:
             try:

@@ -76,6 +76,37 @@ class MenuTests(unittest.TestCase):
                 with self.assertRaises(menu.MenuError): menu.connect('a@b.fr', password, opener)
                 self.assertEqual(parse_qs(urlsplit(seen[0]).query)['password'], [password])
 
+    def test_token_login_and_refusal(self):
+        seen = []
+        def accepted(request, timeout):
+            seen.append(request.full_url)
+            return FakeResponse(json.dumps({'SUCCESS': True, 'MESINFOS': {'MESSITE': [{'SITEID': 7}]},
+                                            'MONPLANNING': PLANNING_LOGIN}).encode())
+        self.assertEqual(menu.connect_token('AbC123', accepted), (7, PLANNING_LOGIN))
+        self.assertIn('token=AbC123', seen[0])
+        self.assertNotIn('password', seen[0])
+        with self.assertRaises(menu.MenuError) as caught:
+            menu.connect_token('périmé-secret', lambda r, timeout: FakeResponse(b'{"SUCCESS": false, "EXCEPTIONMESSAGE": "Erreur Token"}'))
+        self.assertNotIn('périmé-secret', str(caught.exception))
+        self.assertIn('MYMRS_TOKEN', str(caught.exception))
+
+    def test_identities_order(self):
+        self.assertEqual(menu.identities_from_env({}), [])
+        self.assertEqual(menu.identities_from_env({'MYMRS_LOGIN': 'a'}), [])
+        both = {'MYMRS_TOKEN': ' jeton \n', 'MYMRS_LOGIN': 'a@b.fr', 'MYMRS_PASSWORD': '#x'}
+        self.assertEqual(menu.identities_from_env(both),
+                         [{'token': 'jeton'}, {'login': 'a@b.fr', 'password': '#x'}])
+
+    def test_real_shape_dates_descending(self):
+        # Forme observée dans un export réel de l'appli : jours dans l'ordre décroissant, plats avec identifiants.
+        recipe = lambda lib, typ: {'RECETTEID': 1, 'RECETTELIB': lib, 'RECETTEPHOTO': '', 'TYPOID': 2, 'TYPONAME': typ}
+        planning = [{'ZSLIBELLE': 'Restaurant Principal', 'PROGRAMME': [
+            {'DATE': '2026-10-16', 'RECETTE': [recipe('Pizza', 'Saine Attitude')]},
+            {'DATE': '2026-10-13', 'RECETTE': [recipe('Gratin', 'Trattoria'), recipe('Salade', 'Entrée')]}]}]
+        data = menu.build(menu.collect(planning), NOW.date(), NOW)
+        self.assertEqual([d['date'] for d in data['days']], ['2026-10-13', '2026-10-16'])
+        self.assertEqual(data['days'][0]['restaurants'][0]['items'][0], {'type': 'Trattoria', 'label': 'Gratin'})
+
     def test_errors_do_not_contain_credentials(self):
         def refused(request, timeout):
             raise HTTPError(request.full_url, 403, 'Forbidden', {}, None)
@@ -103,7 +134,7 @@ class MenuTests(unittest.TestCase):
             return FakeResponse(json.dumps(body).encode())
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
-            menu.diagnostic('a@b.fr', 'motdepasse-secret', date(2026, 10, 13), opener)
+            menu.diagnostic({'login': 'a@b.fr', 'password': 'motdepasse-secret'}, date(2026, 10, 13), opener)
         text = out.getvalue()
         for secret in ['Dupont', 'jeton-secret', 'motdepasse-secret', 'a@b.fr']:
             self.assertNotIn(secret, text)

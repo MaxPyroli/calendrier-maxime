@@ -16,7 +16,7 @@ button:hover:not(:disabled){background:#e8f1ee}button:disabled{opacity:.35;curso
 .dish:first-of-type{border-top:0;padding-top:0}
 .type{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:#6f8f87}
 .label{font-size:15px;line-height:1.35}
-.next{margin-top:18px}.next h3{margin:0 0 8px;font-size:13px;font-weight:700;color:#5d7a73}
+.next{margin-top:14px}.next summary{cursor:pointer;padding:6px 0 10px;font-size:13px;font-weight:700;color:#5d7a73}
 .next .card{background:rgba(255,255,255,.6)}
 .empty,footer{font-size:12px;color:#5d7a73}footer{margin-top:16px}footer a{color:inherit}
 </style></head><body><main>
@@ -60,7 +60,7 @@ function show(){
  $('after').replaceChildren();
  const upcoming=days[index+1];
  if(upcoming&&day.date>=todayKey){
-  $('after').append(node('h3',nameOf(upcoming.date,todayKey)),cards(upcoming));
+  const more=node('details');more.append(node('summary',nameOf(upcoming.date,todayKey)),cards(upcoming));$('after').append(more);
  }
  $('prev').disabled=index<=0;$('next').disabled=index>=days.length-1;
 }

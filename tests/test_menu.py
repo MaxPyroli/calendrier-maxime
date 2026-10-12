@@ -65,6 +65,17 @@ class MenuTests(unittest.TestCase):
         self.assertEqual((site_id, planning), (7, PLANNING_LOGIN))
         self.assertIn('password=se+cret%26%3D', seen[0])
 
+    def test_special_characters_roundtrip(self):
+        from urllib.parse import parse_qs, urlsplit
+        for password in ['#abc', '$abc', '%41bc', '+abc', '"abc', "'abc", '!abc', '{abc}', 'é&=? /\\ x', '@ab:c']:
+            with self.subTest(password=password):
+                seen = []
+                def opener(request, timeout):
+                    seen.append(request.full_url)
+                    return FakeResponse(b'{"SUCCESS": false}')
+                with self.assertRaises(menu.MenuError): menu.connect('a@b.fr', password, opener)
+                self.assertEqual(parse_qs(urlsplit(seen[0]).query)['password'], [password])
+
     def test_errors_do_not_contain_credentials(self):
         def refused(request, timeout):
             raise HTTPError(request.full_url, 403, 'Forbidden', {}, None)

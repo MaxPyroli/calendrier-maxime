@@ -59,11 +59,16 @@ jobs:
         run: python weekly.py
 
       # Menu de la cantine (myMRS). Étape facultative : sans secrets, ou en cas d'échec,
-      # le calendrier est publié quand même et le dernier menu en ligne reste en place.
+      # le calendrier est publié quand même et le dernier menu enregistré reste affiché.
       - name: Générer le menu de la cantine
         if: ${{ (env.MYMRS_TOKEN != '' || env.MYMRS_LOGIN != '') && !inputs.essai }}
-        continue-on-error: true
-        run: python menu.py
+        run: |
+          # Si myMRS refuse l'accès, on reconstruit quand même la page (nouvelle mise en page)
+          # depuis le dernier menu enregistré et on le signale par un avertissement.
+          if ! python menu.py; then
+            echo "::warning title=Menu cantine::myMRS a refusé l'accès, le menu n'est pas actualisé (voir l'erreur ci-dessus)."
+            python menu.py --render-only || true
+          fi
 
       # Lancement manuel avec « essai » : montre ce que myMRS renvoie (sans données personnelles)
       # puis le menu obtenu, et s'arrête là sans rien publier.
@@ -90,7 +95,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html audit.json
-          if [ -f menu.html ]; then git add menu.html; fi
+          for f in menu.html menu.json; do if [ -f "$f" ]; then git add "$f"; fi; done
           if git diff --cached --quiet; then
             echo "Aucun changement à publier."
             exit 0

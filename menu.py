@@ -24,6 +24,7 @@ PARIS = ZoneInfo('Europe/Paris')
 API = 'https://www.mymrs.fr/webservices'
 LOGIN = '/connexion.cfc?method=getConnexion'
 PLANNING = '/menu.cfc?method=getPlanningBySite'
+DATA_FILE = ROOT / 'menu.json'
 DEVICE = 'DUMMY__IMEI'  # valeur envoyée par l'appli web officielle
 MONTHS = {m: i for i, m in enumerate(['january', 'february', 'march', 'april', 'may', 'june', 'july',
                                        'august', 'september', 'october', 'november', 'december'], 1)}
@@ -78,12 +79,21 @@ def connect_token(token, opener=urlopen):
     return open_session({'token': token}, opener)
 
 
+def refusal(identity, data):
+    text = ('Jeton refusé ou expiré par myMRS : en récupérer un nouveau (MYMRS_TOKEN)' if 'token' in identity
+            else 'Connexion refusée par myMRS : vérifier MYMRS_LOGIN et MYMRS_PASSWORD')
+    code = pick(data, 'EXCEPTIONTYPE')
+    detail = ', '.join(filter(None, [clean(pick(data, 'EXCEPTIONMESSAGE'))[:60],
+                                     f'type {code}' if code not in (None, '') else '']))
+    if detail and not any(secret and secret in detail for secret in identity.values()):
+        text += f' [réponse : {detail}]'
+    return MenuError(text)
+
+
 def open_session(identity, opener=urlopen):
     data = call(LOGIN, {**identity, 'device': DEVICE}, opener)
     if not truthy(pick(data, 'SUCCESS')):
-        if 'token' in identity:
-            raise MenuError('Jeton refusé ou expiré par myMRS : en récupérer un nouveau (MYMRS_TOKEN)')
-        raise MenuError('Connexion refusée par myMRS : vérifier MYMRS_LOGIN et MYMRS_PASSWORD')
+        raise refusal(identity, data)
     sites = pick(pick(data, 'MESINFOS'), 'MESSITE') or []
     site_id = pick(sites[0], 'SITEID') if sites else None
     return site_id, pick(data, 'MONPLANNING')
@@ -92,14 +102,15 @@ def open_session(identity, opener=urlopen):
 def identities_from_env(environ=os.environ):
     """Accès possibles, dans l'ordre d'essai : identifiant + mot de passe (durable), puis jeton de l'appli."""
     found = []
-    password = environ.get('MYMRS_PASSWORD')
+    login = environ.get('MYMRS_LOGIN', '').strip()
+    password = environ.get('MYMRS_PASSWORD', '').rstrip('\r\n')
     if environ.get('MYMRS_PASSWORD_HEX', '').strip():
         try:
             password = bytes.fromhex(environ['MYMRS_PASSWORD_HEX'].strip()).decode('utf-8')
         except ValueError:
             raise MenuError('MYMRS_PASSWORD_HEX invalide : uniquement des chiffres et lettres a-f') from None
-    if environ.get('MYMRS_LOGIN') and password:
-        found.append({'login': environ['MYMRS_LOGIN'], 'password': password})
+    if login and password:
+        found.append({'login': login, 'password': password})
     if environ.get('MYMRS_TOKEN', '').strip():
         found.append({'token': environ['MYMRS_TOKEN'].strip()})
     return found
@@ -181,7 +192,7 @@ def build(merged, today, now):
     days = [d for d in days if d['restaurants']]
     if not days:
         raise MenuError('Aucun menu dans la réponse de myMRS : publication bloquée')
-    return {'days': days, 'updated': now.strftime('%d/%m/%Y à %H:%M')}
+    return {'days': days, 'updated': now.strftime('%d/%m/%Y à %H:%M'), 'updatedAt': now.isoformat(timespec='minutes')}
 
 
 def render(data):
@@ -228,7 +239,17 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, default=ROOT / 'menu.html')
     parser.add_argument('--diagnostic', action='store_true', help='affiche la forme des réponses, ne publie rien')
+    parser.add_argument('--render-only', action='store_true',
+                        help="reconstruit la page depuis menu.json sans interroger myMRS (nouvelle mise en page, menu inchangé)")
     args = parser.parse_args()
+    if args.render_only:
+        try:
+            data = json.loads(DATA_FILE.read_text(encoding='utf-8'))
+        except (OSError, ValueError):
+            sys.exit('Erreur : menu.json introuvable ou illisible.')
+        atomic_write(args.output, render(data).encode('utf-8'))
+        print(f"Page reconstruite depuis menu.json (menu du {data.get('updated', '?')}).")
+        return
     try:
         identities = identities_from_env()
     except MenuError as error:
@@ -261,6 +282,7 @@ def main():
         data = build(collect(planning, extra), now.date(), now)
     except MenuError as error:
         sys.exit(f'Erreur : {error}')
+    atomic_write(DATA_FILE, (json.dumps(data, ensure_ascii=False, indent=1) + '\n').encode('utf-8'))
     atomic_write(args.output, render(data).encode('utf-8'))
     print(json.dumps({'jours': len(data['days']), 'restaurants': sorted({r['name'] for d in data['days'] for r in d['restaurants']})},
                      ensure_ascii=False))

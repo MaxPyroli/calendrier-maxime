@@ -1,7 +1,10 @@
 import contextlib
 import io
 import json
+import tempfile
 import unittest
+from pathlib import Path
+from unittest import mock
 from datetime import date, datetime
 from io import BytesIO
 from urllib.error import HTTPError
@@ -112,6 +115,38 @@ class MenuTests(unittest.TestCase):
         with self.assertRaises(menu.MenuError) as caught:
             menu.identities_from_env({'MYMRS_LOGIN': 'a', 'MYMRS_PASSWORD_HEX': 'zz-secret'})
         self.assertNotIn('zz-secret', str(caught.exception))
+
+    def test_refusal_detail_never_echoes_secret(self):
+        def refuse(request, timeout):
+            return FakeResponse(json.dumps({'SUCCESS': False, 'EXCEPTIONMESSAGE': 'Erreur login', 'EXCEPTIONTYPE': 1}).encode())
+        with self.assertRaises(menu.MenuError) as caught:
+            menu.connect('a@b.fr', 'pw', refuse)
+        self.assertIn('Erreur login', str(caught.exception))
+        self.assertIn('type 1', str(caught.exception))
+        def echo(request, timeout):
+            return FakeResponse(json.dumps({'SUCCESS': False, 'EXCEPTIONMESSAGE': 'mot de passe secretpw invalide'}).encode())
+        with self.assertRaises(menu.MenuError) as caught:
+            menu.connect('a@b.fr', 'secretpw', echo)
+        self.assertNotIn('secretpw', str(caught.exception))
+
+    def test_secret_values_are_trimmed(self):
+        env = {'MYMRS_LOGIN': ' a@b.fr \n', 'MYMRS_PASSWORD': '#x\r\n'}
+        self.assertEqual(menu.identities_from_env(env), [{'login': 'a@b.fr', 'password': '#x'}])
+
+    def test_render_only_rebuilds_page_from_saved_data(self):
+        data = menu.build(menu.collect(PLANNING_LOGIN), NOW.date(), NOW)
+        with tempfile.TemporaryDirectory() as folder:
+            saved, out = Path(folder) / 'menu.json', Path(folder) / 'menu.html'
+            saved.write_text(json.dumps(data), encoding='utf-8')
+            with mock.patch.object(menu, 'DATA_FILE', saved), mock.patch('sys.argv', ['menu.py', '--render-only', '--output', str(out)]), \
+                    contextlib.redirect_stdout(io.StringIO()):
+                menu.main()
+            page = out.read_text(encoding='utf-8')
+            self.assertEqual(json.loads(page.split('id="data">')[1].split('</script>')[0]), data)
+            self.assertEqual(data['updatedAt'], '2026-10-13T11:00+02:00')
+            saved.unlink()
+            with mock.patch.object(menu, 'DATA_FILE', saved), mock.patch('sys.argv', ['menu.py', '--render-only', '--output', str(out)]):
+                with self.assertRaises(SystemExit): menu.main()
 
     def test_real_shape_dates_descending(self):
         # Forme observée dans un export réel de l'appli : jours dans l'ordre décroissant, plats avec identifiants.

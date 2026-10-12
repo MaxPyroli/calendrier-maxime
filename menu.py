@@ -134,6 +134,8 @@ def dishes(recipes):
     found = []
     for recipe in recipes if isinstance(recipes, list) else []:
         label = clean(pick(recipe, 'RECETTELIB'))
+        if label.count('"') == 1:  # guillemet isolé laissé dans la saisie du menu
+            label = label.strip('"').strip()
         if label:
             found.append({'type': clean(pick(recipe, 'TYPONAME')), 'label': label})
     return found

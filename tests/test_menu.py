@@ -76,6 +76,10 @@ class MenuTests(unittest.TestCase):
                 with self.assertRaises(menu.MenuError): menu.connect('a@b.fr', password, opener)
                 self.assertEqual(parse_qs(urlsplit(seen[0]).query)['password'], [password])
 
+    def test_stray_quote_removed_but_pairs_kept(self):
+        recipes = [{'RECETTELIB': '"Semaine du goût : Boeuf   revisité '}, {'RECETTELIB': '"Le fameux" burger'}]
+        self.assertEqual([d['label'] for d in menu.dishes(recipes)], ['Semaine du goût : Boeuf revisité', '"Le fameux" burger'])
+
     def test_token_login_and_refusal(self):
         seen = []
         def accepted(request, timeout):

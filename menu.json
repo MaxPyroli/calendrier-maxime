@@ -1,40 +1,6 @@
 {
  "days": [
   {
-   "date": "2026-10-13",
-   "restaurants": [
-    {
-     "name": "Restaurant Principal",
-     "items": [
-      {
-       "type": "Saine Attitude",
-       "label": "Quiche au bacon végétal"
-      },
-      {
-       "type": "Le Marché",
-       "label": "Pavé de colin d'Alaska à la crème de citron"
-      },
-      {
-       "type": "BBQ & Co",
-       "label": "Paupiette de veau à la Normande"
-      },
-      {
-       "type": "Trattoria",
-       "label": "Knack végétale"
-      },
-      {
-       "type": "Bistronomie",
-       "label": "Semaine du goût : Poulet jaune à la moutarde à l'ancienne"
-      },
-      {
-       "type": "Les Comptoirs",
-       "label": "Filet mignon de porc laqué"
-      }
-     ]
-    }
-   ]
-  },
-  {
    "date": "2026-10-14",
    "restaurants": [
     {
@@ -113,6 +79,6 @@
    ]
   }
  ],
- "updated": "14/10/2026 à 23:38",
- "updatedAt": "2026-10-14T23:38+02:00"
+ "updated": "15/10/2026 à 06:33",
+ "updatedAt": "2026-10-15T06:33+02:00"
 }

@@ -1,36 +1,6 @@
 {
  "days": [
   {
-   "date": "2026-10-14",
-   "restaurants": [
-    {
-     "name": "Restaurant Principal",
-     "items": [
-      {
-       "type": "Saine Attitude",
-       "label": "Pâtes farcies : Agnoloni 4 fromages"
-      },
-      {
-       "type": "Le Marché",
-       "label": "Dos de lieu noir, aïoli légère"
-      },
-      {
-       "type": "BBQ & Co",
-       "label": "Entrecôte à la moutarde"
-      },
-      {
-       "type": "Bistronomie",
-       "label": "Semaine du goût : Saucisse de Montbéliard, sauce au porto"
-      },
-      {
-       "type": "Les Comptoirs",
-       "label": "Escalope de dinde aux champignons"
-      }
-     ]
-    }
-   ]
-  },
-  {
    "date": "2026-10-15",
    "restaurants": [
     {
@@ -79,6 +49,6 @@
    ]
   }
  ],
- "updated": "15/10/2026 à 23:20",
- "updatedAt": "2026-10-15T23:20+02:00"
+ "updated": "16/10/2026 à 06:26",
+ "updatedAt": "2026-10-16T06:26+02:00"
 }

@@ -9415,7 +9415,7 @@
   {
     "uid": "57eo98dvd577snak2urtlq4vdo@google.com",
     "summary": "UE3 Planification, gouvernance, politiques et action publique",
-    "start": "vDDDTypes(2026-12-10 13:00:00+00:00, Parameters({}))",
+    "start": "vDDDTypes(2026-12-10 12:30:00+00:00, Parameters({}))",
     "classification": "keep",
     "rules": [
       "commun-planification"

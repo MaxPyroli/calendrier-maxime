@@ -2124,10 +2124,12 @@
     "uid": "2ehis94502968mamum9quqfk06@google.com",
     "summary": "Férié",
     "start": "vDDDTypes(2022-11-01 09:00:00+01:00, Parameters({'TZID': 'Europe/Paris'}))",
-    "classification": "unknown",
-    "rules": [],
+    "classification": "keep",
+    "rules": [
+      "ferie"
+    ],
     "kept": false,
-    "series_blocked": false
+    "series_blocked": true
   },
   {
     "uid": "2ehis94502968mamum9quqfk06@google.com",
@@ -2257,9 +2259,11 @@
     "uid": "39jifufpg8istvbfofhi0pejm3@google.com",
     "summary": "Férié",
     "start": "vDDDTypes(2022-11-11 08:00:00+00:00, Parameters({}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "ferie"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {
@@ -3676,9 +3680,11 @@
     "uid": "3vi3l57tgfudh85ej7rr0dv064@google.com",
     "summary": "Férié",
     "start": "vDDDTypes(2023-11-01 08:00:00+00:00, Parameters({}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "ferie"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {
@@ -3966,9 +3972,11 @@
     "uid": "4ckqosi7rtt9vdpdrnv4n3g7jm@google.com",
     "summary": "Forum des métiers",
     "start": "vDDDTypes(2023-12-07 16:00:00+00:00, Parameters({}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "forum-metiers"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {
@@ -4077,9 +4085,11 @@
     "uid": "0snko3ml36ig27aqmukjgnln90@google.com",
     "summary": "Forum des métiers",
     "start": "vDDDTypes(2023-12-18 16:00:00+00:00, Parameters({}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "forum-metiers"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {
@@ -4168,9 +4178,11 @@
     "uid": "06slv58jsjt6q6l23p2esc2cig@google.com",
     "summary": "Forum des métiers",
     "start": "vDDDTypes(2024-01-08 16:00:00+00:00, Parameters({}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "forum-metiers"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {
@@ -4215,9 +4227,11 @@
     "uid": "7fbo6eg34fs69kttm2pspp0l0n@google.com",
     "summary": "Forum des métiers",
     "start": "vDDDTypes(2024-01-15 16:00:00+00:00, Parameters({}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "forum-metiers"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {
@@ -4282,9 +4296,11 @@
     "uid": "4ep8b60gi0s0sdernniiv573oh@google.com",
     "summary": "Forum des métiers",
     "start": "vDDDTypes(2024-01-22 16:00:00+00:00, Parameters({}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "forum-metiers"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {
@@ -6848,9 +6864,11 @@
     "uid": "51m05m2d5dlgs4ilitbu1a1rl5@google.com",
     "summary": "Férié",
     "start": "vDDDTypes(2025-11-11 08:00:00+00:00, Parameters({}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "ferie"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {
@@ -8104,9 +8122,11 @@
     "uid": "6df4jf9ept0dgs0h1lsc90jb8q@google.com",
     "summary": "Travail personnel et collectif",
     "start": "vDDDTypes(2026-10-01 14:00:00+02:00, Parameters({'TZID': 'Europe/Paris'}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "travail-personnel-collectif"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {
@@ -8883,9 +8903,11 @@
     "uid": "1hbfoc84f35ej2r2qkfo4stvjk@google.com",
     "summary": "Présentation recherche stages Sandrine Vazquez",
     "start": "vDDDTypes(2026-11-05 13:00:00+00:00, Parameters({}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "presentation-recherche-stages"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {
@@ -8980,9 +9002,11 @@
     "uid": "3tl1clkjnnrnnd0fj0ei708prr@google.com",
     "summary": "Férié",
     "start": "vDDDTypes(2026-11-11 08:00:00+00:00, Parameters({}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "ferie"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {
@@ -9011,9 +9035,11 @@
     "uid": "p7lrjq6up90bra3plrg9au6htg@google.com",
     "summary": "Semaine transversale 1",
     "start": "vDDDTypes(2026-11-16 08:00:00+00:00, Parameters({}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "semaine-transversale"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {
@@ -9427,9 +9453,11 @@
     "uid": "6df4jf9ept0dgs0h1lsc90jb8q@google.com",
     "summary": "Travail personnel et collectif",
     "start": "vDDDTypes(2026-12-10 16:00:00+01:00, Parameters({'TZID': 'Europe/Paris'}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "travail-personnel-collectif"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {
@@ -9722,9 +9750,11 @@
     "uid": "cpkc0jgnvjqmtuillm5a4k08hs@google.com",
     "summary": "Données territoriales et de mobilité (3 groupes)",
     "start": "vDDDTypes(2027-01-07 08:30:00+00:00, Parameters({}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "donnees-territoriales"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {
@@ -9874,9 +9904,11 @@
     "uid": "6oea5rihfq74hk44tcsf3hraeg@google.com",
     "summary": "Données territoriales et de mobilité (3 groupes)",
     "start": "vDDDTypes(2027-01-14 08:30:00+00:00, Parameters({}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "donnees-territoriales"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {
@@ -9993,18 +10025,22 @@
     "uid": "6df4jf9ept0dgs0h1lsc90jb8q@google.com",
     "summary": "Travail personnel et collectif",
     "start": "vDDDTypes(2027-01-20 14:00:00+01:00, Parameters({'TZID': 'Europe/Paris'}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "travail-personnel-collectif"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {
     "uid": "9jbq9r07u8lnarif8n94uv1o24@google.com",
     "summary": "Données territoriales et de mobilité (3 groupes)",
     "start": "vDDDTypes(2027-01-21 08:30:00+00:00, Parameters({}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "donnees-territoriales"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {
@@ -10033,9 +10069,11 @@
     "uid": "mev8ambmjrpqpl63ejjh44bsic@google.com",
     "summary": "Données territoriales et de mobilité (3 groupes)",
     "start": "vDDDTypes(2027-01-25 08:30:00+00:00, Parameters({}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "donnees-territoriales"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {
@@ -10130,9 +10168,11 @@
     "uid": "68vi078o7emkhke2b33do9ock8@google.com",
     "summary": "Forum des métiers",
     "start": "vDDDTypes(2027-01-28 08:00:00+00:00, Parameters({}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "forum-metiers"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {
@@ -10150,9 +10190,11 @@
     "uid": "9vn047nl6rc55ej7ed9lcmdqv4@google.com",
     "summary": "Semaine transversale 2",
     "start": "vDDDTypes(2027-02-01 08:00:00+00:00, Parameters({}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "semaine-transversale"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {
@@ -10192,9 +10234,11 @@
     "uid": "l39kpk0ernpcpqhj4tg1sqrhlk@google.com",
     "summary": "Séminaire pro",
     "start": "vDDDTypes(2027-02-09 08:00:00+00:00, Parameters({}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "seminaire-pro"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {
@@ -10278,9 +10322,11 @@
     "uid": "o06amjfam6i4ccv9kg1pfobcfk@google.com",
     "summary": "Données territoriales et de mobilité (3 groupes)",
     "start": "vDDDTypes(2027-02-11 08:30:00+00:00, Parameters({}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "donnees-territoriales"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {
@@ -10331,9 +10377,11 @@
     "uid": "p3nr3m9bjsv767d614gg0usmm0@google.com",
     "summary": "Séminaire pro",
     "start": "vDDDTypes(2027-02-16 08:00:00+00:00, Parameters({}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "seminaire-pro"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {
@@ -10406,9 +10454,11 @@
     "uid": "n1ve378963h2c6n1314evo9ut4@google.com",
     "summary": "Données territoriales et de mobilité (3 groupes)",
     "start": "vDDDTypes(2027-02-18 08:30:00+00:00, Parameters({}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "donnees-territoriales"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {
@@ -10448,9 +10498,11 @@
     "uid": "80tsck208ooivkisl5fe6ur4jg@google.com",
     "summary": "Séminaire pro",
     "start": "vDDDTypes(2027-02-23 08:30:00+00:00, Parameters({}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "seminaire-pro"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {
@@ -10512,9 +10564,11 @@
     "uid": "pjij9e4q6j3ntd2624k7eo40v0@google.com",
     "summary": "Données territoriales et de mobilité (3 groupes)",
     "start": "vDDDTypes(2027-02-25 09:00:00+00:00, Parameters({}))",
-    "classification": "unknown",
-    "rules": [],
-    "kept": false,
+    "classification": "keep",
+    "rules": [
+      "donnees-territoriales"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {

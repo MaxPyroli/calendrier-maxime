@@ -1,5 +1,15 @@
 # Mémoire de reprise — 19 octobre 2026
 
+## Vue semaine en grille pour ordinateur (19 octobre 2026)
+
+- Demande utilisateur : un affichage « semaine » où l'on voit tout à l'horizontale sur ordinateur, avec des horaires à emplacements fixes pour voir la charge.
+- `template.html` : `renderGrid()` (appelée par `render()` quand `currentView()==='week'`) construit une grille CSS : colonne d'heures + une colonne par jour (lundi à vendredi, samedi/dimanche seulement s'ils ont un événement, comme la liste). Heures fixes 08:00–19:00 à 52 px par heure (`PH`), élargies à l'heure entière si un cours sort de cette plage. Chaque cours est positionné à son heure réelle avec sa durée réelle ; cours simultanés côte à côte (algorithme de voies par groupes de chevauchement) ; info-bulle avec heure, titre, salle. En-tête de jour : total d'heures de cours (`unionMinutes`, chevauchements comptés une fois) ; le résumé ajoute le total de la semaine.
+- Événements `allDay` ou sur plusieurs jours : pastilles au-dessus de la grille, sur autant de colonnes que de jours concernés (`grid-column: n / span k`). Une semaine transversale s'y ajoute en bandes hachurées (début réel lundi 09:00, fin réelle vendredi 17:00). Le bloc unique de la vue liste est inchangé.
+- Eau : même vague que la vue liste (`course-water-sway`, même motif SVG) mais proportionnelle à l'heure réelle sur la grille ; jours passés remplis, colonne d'aujourd'hui descendue jusqu'à l'heure actuelle avec le pourcentage de la journée (premier → dernier cours, comme avant), jours futurs secs. Mise à jour chaque seconde par `updateGrid()` depuis `updateDayProgress()`.
+- Vue par défaut : grille si l'écran fait au moins 1000 px de large, liste sinon ; le bouton de la barre de navigation bascule et le choix est gardé dans `localStorage` (protégé par try/catch). En vue semaine, l'intro est masquée et la page élargie à 1 280 px pour que la grille tienne.
+- Vérifié dans Chromium avec horloge simulée (1280×900) : positions exactes (cours du lundi 09:00 à 52 px), eau (mercredi 12:00 à 208 px), bascule et mémorisation après rechargement, mobile en liste, semaine transversale (pastille sur 5 colonnes, 5 bandes, cours du jeudi à 312 px), événement un samedi (6 colonnes), deux cours qui se chevauchent (deux voies à 50 %), cours tardif (la grille s'étend). La grille tient sans défiler sur 1280×900 et 1920×1080 ; il manque 62 px sur 800 px de haut. Régressions de la vue liste OK ; le critère « bouton » de l'ancien script `check_today.cjs` exigeait que le vendredi remonte en haut de l'écran, ce qui n'est plus possible : la version corrigée passe.
+- Limites connues : pas de vue semaine mobile (la liste reste la vue des téléphones) ; la vague de la grille suit l'heure de l'horloge et non les cours (elle passe donc aussi sur les pauses).
+
 ## Week-ends masqués (19 octobre 2026)
 
 - Demande utilisateur : enlever les samedis et dimanches, sans cours le week-end.

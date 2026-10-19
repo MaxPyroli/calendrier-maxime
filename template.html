@@ -23,10 +23,23 @@
 .day-today{scroll-margin-top:12px}
 .week-block .day-heading{margin-bottom:6px}.week-axis{position:relative;margin:14px 0 8px}
 .week-tick{position:absolute;left:0;right:0;height:0;border-top:1px dashed #cfdcd6}.week-tick span{position:absolute;right:0;top:5px;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#7a9a91}
-.week-item{position:absolute;left:0;right:88px;margin:0}.week-here{position:absolute;left:0;right:0;top:var(--surface,0px);height:0;pointer-events:none}.week-dry .day-water{display:none}</style></head><body><main>
+.week-item{position:absolute;left:0;right:88px;margin:0}.week-here{position:absolute;left:0;right:0;top:var(--surface,0px);height:0;pointer-events:none}.week-dry .day-water{display:none}[hidden]{display:none!important}
+body.view-week main{max-width:1280px;padding:24px}body.view-week header p{display:none}body.view-week h1{font-size:clamp(26px,3vw,38px);margin:6px 0}body.view-week nav{margin:14px 0}body.view-week #range{margin:14px 0 4px}body.view-week #stats{margin-bottom:12px}
+.wk{background:#fff;border:1px solid #dce4de;border-radius:14px;overflow-x:auto}.wk-inner{min-width:calc(56px + var(--cols,5)*150px)}.wk-row{display:grid;grid-template-columns:56px repeat(var(--cols,5),minmax(0,1fr))}
+.wk-head{border-bottom:1px solid #dce4de}.wk-hd{padding:10px 12px 8px;border-left:1px solid #e6ece8;border-bottom:3px solid transparent}.wk-hd h3{margin:0;font-size:15px}.wk-load{font-size:12px;font-weight:700;color:#397266}.wk-hd.today{border-bottom-color:#41aec5}.wk-hd.today h3{color:#137565}
+.wk-allday{gap:4px 0;padding:6px 0;border-bottom:1px solid #dce4de;align-items:start}.wk-allday .day-badge{margin:0 4px}
+.wk-body{height:var(--h)}.wk-axis{position:relative}.wk-hour{position:absolute;right:8px;transform:translateY(-50%);font-size:11px;font-weight:700;color:#7a9a91}.wk-hour:first-child{transform:none}
+.wk-col{position:relative;overflow:hidden;border-left:1px solid #e6ece8;background-image:linear-gradient(#e9efeb 1px,transparent 1px);background-size:100% var(--ph,52px)}
+.wk-band{position:absolute;left:0;right:0;background:repeating-linear-gradient(135deg,rgba(57,114,102,.08) 0 8px,transparent 8px 16px)}
+.wk-event{position:absolute;z-index:1;padding:5px 8px;overflow:hidden;border-radius:8px;border:1px solid rgba(173,204,200,.9);background:rgba(240,247,244,.96);font-size:12px;line-height:1.3}.wk-event time{display:block;font-size:11.5px;color:#566b6d}.wk-event h4{margin:1px 0 0;font-size:13px;line-height:1.25}.wk-event .room{margin:2px 0 0;font-size:11px;font-weight:600;color:#397266}
+.wk-water{position:absolute;z-index:2;pointer-events:none;left:0;right:0;top:-24px;height:calc(var(--surface,0px) + 24px - 8px);background:linear-gradient(to bottom,rgba(106,200,213,.3) max(0px,calc(100% - 70px)),rgba(116,214,217,.18));animation:course-water-sway 8s ease-in-out infinite}
+.wk-water::after{content:'';position:absolute;top:100%;left:0;width:100%;height:16px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='16' viewBox='0 0 240 16'%3E%3Cpath d='M0 0H240V8C220 0 200 0 180 8S140 16 120 8S80 0 60 8S20 16 0 8Z' fill='%2374d6d9' fill-opacity='.18'/%3E%3C/svg%3E") repeat-x}
+.wk-col:not(.wk-today):not(.wk-past) .wk-water,.wk-dry .wk-water{display:none}.wk-past .wk-water,.wk-full .wk-water{top:0;height:100%;background:rgba(106,200,213,.3);animation:none}.wk-past .wk-water::after,.wk-full .wk-water::after{display:none}
+.wk-percent{position:absolute;z-index:3;right:6px;top:0;transform:translateY(-50%);padding:3px 6px;border-radius:999px;background:rgba(255,255,255,.92);color:#15768a;font-size:11px;font-weight:800;white-space:nowrap;box-shadow:0 1px 4px rgba(20,93,106,.12)}.wk-dry .wk-percent{display:none}.wk-full .wk-percent{transform:translateY(-130%)}
+@media(prefers-reduced-motion:reduce){.wk-water{animation:none}}</style></head><body><main>
 <header><div class="eyebrow">M2 TRAME / TRANSPORTS & MOBILITÉS</div><h1>Ma semaine de cours.</h1><p>Le programme de Maxime, jour par jour : socle commun et enseignements attribués. Horaires en heure de Paris.</p></header>
-<nav aria-label="Choisir une semaine"><button id="prev" aria-label="Semaine précédente">←</button><button id="today">Cette semaine</button><label for="date">Date</label><input id="date" type="date"><button id="next" aria-label="Semaine suivante">→</button></nav>
-<h2 id="range"></h2><div id="stats" aria-live="polite"></div><div class="grid" id="days"></div>
+<nav aria-label="Choisir une semaine"><button id="prev" aria-label="Semaine précédente">←</button><button id="today">Cette semaine</button><label for="date">Date</label><input id="date" type="date"><button id="next" aria-label="Semaine suivante">→</button><button id="view" aria-label="Changer de vue">Vue semaine</button></nav>
+<h2 id="range"></h2><div id="stats" aria-live="polite"></div><div class="grid" id="days"></div><div class="wk" id="weekGrid" hidden></div>
 <div class="notice">Seuls les cours identifiés sont affichés. Un intitulé non reconnu reste masqué par prudence. Une semaine vide ne garantit pas l’absence de cours.</div>
 <footer id="footer"></footer><p><a href="https://calendar.google.com/calendar/ical/m2.tm.orga%40gmail.com/public/basic.ics">Consulter la source commune</a></p>
 </main><script type="application/json" id="data">__CALENDAR_DATA__</script><script>
@@ -62,6 +75,85 @@ const weekLike=e=>spansDays(e) && /\bsemaine transversale\b/.test(e.title.normal
 const lastDayKey=e=>dayKey(new Date(Date.parse(e.end)-1));
 const touches=(e,k)=>{const a=dayKey(new Date(e.start)), b=lastDayKey(e);return a<=k && (b>=k || a===k);};
 const hasEvents=k=>data.events.some(e=>touches(e,k));
+// Vue « semaine » : choix mémorisé, sinon grille sur grand écran et liste sur petit écran.
+let choice=null;try{const stored=localStorage.getItem('view');if(stored==='list'||stored==='week')choice=stored;}catch(e){}
+const wideScreen=matchMedia('(min-width: 1000px)'), currentView=()=>choice||(wideScreen.matches?'week':'list');
+const PH=52;
+const endMin=e=>{const m=minutes(new Date(e.end));return m<=minutes(new Date(e.start))?1440:m;};
+function unionMinutes(spans){
+ let total=0,from=0,to=-1;
+ for(const [a,b] of [...spans].sort((x,y)=>x[0]-y[0])){if(to<0||a>to){if(to>=0)total+=to-from;from=a;to=b;}else if(b>to)to=b;}
+ return to>=0?total+to-from:total;
+}
+const formatLoad=m=>{const h=Math.floor(m/60), r=Math.round(m%60);return h?h+' h'+(r?' '+String(r).padStart(2,'0'):''):r+' min';};
+function renderGrid(count,thisWeek){
+ const keys=[];for(let i=0;i<7;i++){const k=iso(add(current,i));if(i<5||hasEvents(k))keys.push(k);}
+ const days=keys.map(k=>{const found=data.events.filter(e=>touches(e,k));return {k,timed:found.filter(e=>!inDayHeading(e)),chips:found.filter(inDayHeading)};});
+ // Heures fixes de 8 h à 19 h pour comparer la charge d'une semaine à l'autre ; élargies seulement si un cours sort de cette plage.
+ let lo=8*60, hi=19*60;
+ for(const d of days)for(const e of d.timed){lo=Math.min(lo,Math.floor(minutes(new Date(e.start))/60)*60);hi=Math.max(hi,Math.ceil(endMin(e)/60)*60);}
+ const height=(hi-lo)/60*PH, grid=$('weekGrid'), inner=node('div','','wk-inner'), today=dayKey(new Date());
+ grid.style.setProperty('--cols',keys.length);grid.style.setProperty('--h',height+'px');grid.style.setProperty('--ph',PH+'px');grid.dataset.lo=lo;grid.dataset.hi=hi;
+ let weekLoad=0;
+ const head=node('div','','wk-row wk-head');head.append(node('div',''));
+ for(const d of days){
+  d.load=unionMinutes(d.timed.map(e=>[minutes(new Date(e.start)),endMin(e)]));weekLoad+=d.load;
+  const cell=node('div','','wk-hd'+(d.k===today?' today':''));cell.append(node('h3',weekday.format(parse(d.k))),node('span',d.load?formatLoad(d.load)+' de cours':'—','wk-load'));head.append(cell);
+ }
+ inner.append(head);
+ // Événements d'une journée entière ou de plusieurs jours : une pastille qui couvre les colonnes concernées.
+ const allDay=node('div','','wk-row wk-allday');allDay.append(node('div',''));let chips=0;
+ for(const e of new Set(days.flatMap(d=>d.chips))){
+  const covered=keys.filter(k=>touches(e,k));if(!covered.length)continue;
+  const chip=node('div','','day-badge'+(spansDays(e)?' multi':''));chip.append(node('strong',e.title));chip.style.gridColumn=(2+keys.indexOf(covered[0]))+' / span '+covered.length;
+  allDay.append(chip);chips++;if(!weekLike(e))count.add(e);
+ }
+ if(chips)inner.append(allDay);
+ const body=node('div','','wk-row wk-body'), axis=node('div','','wk-axis');
+ for(let m=lo;m<hi;m+=60){const hour=node('span',String(m/60).padStart(2,'0')+':00','wk-hour');hour.style.top=((m-lo)/60*PH)+'px';axis.append(hour);}
+ body.append(axis);
+ for(const d of days){
+  const col=node('div','','wk-col'+(d.k<today?' wk-past':d.k===today?' wk-today':''));col.dataset.day=d.k;
+  for(const e of d.chips)if(!e.allDay && spansDays(e)){
+   const from=dayKey(new Date(e.start))===d.k?minutes(new Date(e.start)):0, to=lastDayKey(e)===d.k?endMin(e):1440;
+   const band=node('div','','wk-band');band.style.top=((Math.max(from,lo)-lo)/60*PH)+'px';band.style.height=(Math.max(0,Math.min(to,hi)-Math.max(from,lo))/60*PH)+'px';col.append(band);
+  }
+  // Cours simultanés : placés côte à côte dans la colonne.
+  const items=d.timed.map(e=>({e,a:minutes(new Date(e.start)),b:endMin(e)})).sort((x,y)=>x.a-y.a||y.b-x.b);
+  const lanes=[];let group=[], groupEnd=0;
+  const settle=()=>{const n=lanes.length;for(const it of group){it.n=n;}group=[];lanes.length=0;groupEnd=0;};
+  for(const it of items){
+   if(group.length&&it.a>=groupEnd)settle();
+   let lane=lanes.findIndex(end=>end<=it.a);if(lane<0){lane=lanes.length;lanes.push(0);}
+   lanes[lane]=it.b;it.lane=lane;group.push(it);groupEnd=Math.max(groupEnd,it.b);
+  }
+  settle();
+  for(const it of items){
+   const e=it.e, card=node('article','','wk-event'), when=clock.format(new Date(e.start))+' – '+clock.format(new Date(e.end));
+   card.style.top=((it.a-lo)/60*PH)+'px';card.style.height=Math.max(22,(it.b-it.a)/60*PH-2)+'px';
+   card.style.left='calc('+(it.lane*100/it.n)+'% + 2px)';card.style.width='calc('+(100/it.n)+'% - 4px)';
+   const room=e.room?(e.room.includes(' · ')?'📍 Plusieurs salles : ':'📍 ')+e.room:'';
+   card.title=when+' · '+e.title+(room?' · '+room:'');card.append(node('time',when),node('h4',e.title));if(room)card.append(node('p',room,'room'));
+   col.append(card);count.add(e);
+  }
+  const schedule=d.k===today?daySchedule(d.timed,d.k):null;
+  col.append(node('div','','wk-water'));
+  if(schedule){col.dataset.start=schedule.start.getTime();col.dataset.end=schedule.end.getTime();col.append(node('span','0 %','wk-percent'));}
+  body.append(col);
+ }
+ inner.append(body);grid.replaceChildren(inner);
+ $('stats').textContent=count.size+' séance'+(count.size>1?'s':'')+' identifiée'+(count.size>1?'s':'')+' cette semaine'+(thisWeek.length?' · '+thisWeek.map(e=>e.title).join(', '):'')+(weekLoad?' · '+formatLoad(weekLoad)+' de cours':'');
+}
+function updateGrid(){
+ const grid=$('weekGrid');if(grid.hidden||!grid.dataset.lo)return;
+ const lo=Number(grid.dataset.lo), hi=Number(grid.dataset.hi), now=new Date(), nowMin=minutes(now)+now.getSeconds()/60, ratio=Math.max(0,Math.min(1,(nowMin-lo)/(hi-lo))), height=(hi-lo)/60*PH;
+ grid.querySelectorAll('.wk-col.wk-today').forEach(col=>{
+  col.classList.toggle('wk-dry',ratio<=0);col.classList.toggle('wk-full',ratio>=1);
+  col.style.setProperty('--surface',ratio*height+'px');col.style.setProperty('--sway',Math.min(8,Math.max(0,height-ratio*height-8))+'px');
+  const pill=col.querySelector('.wk-percent');
+  if(pill){const start=Number(col.dataset.start), end=Number(col.dataset.end);pill.textContent=Math.round(Math.max(0,Math.min(1,(now-start)/(end-start)))*100)+' %';pill.style.top=(ratio*height)+'px';}
+ });
+}
 function parisStart(k){
  const [y,m,d]=k.split('-').map(Number);let t=Date.UTC(y,m-1,d)-2*3600000;
  while(dayKey(new Date(t))<k)t+=900000;
@@ -136,7 +228,7 @@ function courseSurface(cards,now,height,midnight){
  return Math.max(0,Math.min(height,surface,next?next.top:height));
 }
 function updateDayProgress(){
- updateWeekBlocks();
+ updateWeekBlocks();updateGrid();
  const now=new Date(), today=dayKey(now);
  document.querySelectorAll('.day-progress').forEach(section=>{
   if(section.dataset.day!==today)return;
@@ -165,7 +257,8 @@ function updateDayProgress(){
  });
 }
 function render(){
-const key=iso(current), end=iso(add(current,7));$('date').value=key;
+const key=iso(current), end=iso(add(current,7)), mode=currentView();$('date').value=key;
+document.body.classList.toggle('view-week',mode==='week');$('view').textContent=mode==='week'?'Vue liste':'Vue semaine';$('days').hidden=mode==='week';$('weekGrid').hidden=mode!=='week';
 $('prev').disabled=key<=data.first;$('next').disabled=key>=data.last;
 const lastIndex=[0,1,2,3,4,5,6].filter(i=>i<5||hasEvents(iso(add(current,i)))).pop(), lastDay=add(current,lastIndex), firstYear=current.getUTCFullYear(), lastYear=lastDay.getUTCFullYear();$('range').textContent=fmt.format(current)+(firstYear!==lastYear?' '+firstYear:'')+' – '+fmt.format(lastDay)+' '+lastYear;
 $('days').replaceChildren();let count=new Set();
@@ -174,6 +267,7 @@ for(const e of thisWeek){
  const keys=[];for(let i=0;i<7;i++){const k=iso(add(current,i));if(dayKey(new Date(e.start))<=k && k<=lastDayKey(e))keys.push(k);}
  if(keys.length>1){blockFor.set(keys[0],{e,keys});keys.forEach(k=>covered.add(k));}
 }
+if(mode==='week'){renderGrid(count,thisWeek);updateDayProgress();return;}
 for(let i=0;i<7;i++){
  if(i>=5 && !hasEvents(iso(add(current,i))))continue;
  {const k0=iso(add(current,i));if(covered.has(k0)){const block=blockFor.get(k0);if(block){const made=weekBlock(block.e,block.keys,block.keys.includes(dayKey(new Date())),count);$('days').append(made.section,made.label);}continue;}}
@@ -206,6 +300,8 @@ function select(d){current=monday(d);if(iso(current)<data.first)current=parse(da
 $('date').min=data.first;$('date').max=iso(add(parse(data.last),6));$('date').onchange=()=>{if($('date').value)select(parse($('date').value));};
 function showToday(animate){const todayKey=dayKey(new Date()), todayDate=parse(todayKey), weekday=todayDate.getUTCDay(), restDay=(weekday===6||weekday===0)&&!hasEvents(todayKey);select(restDay?add(todayDate,weekday===6?2:1):todayDate);const wave=document.querySelector('.week-block.day-progress .week-here'), day=wave||document.querySelector('.day-today');if(day&&(wave||day!==$('days').firstElementChild))day.scrollIntoView({block:wave?'center':'start',behavior:animate&&!matchMedia('(prefers-reduced-motion: reduce)').matches?'smooth':'auto'});}
 $('today').onclick=()=>showToday(true);
+$('view').onclick=()=>{choice=currentView()==='week'?'list':'week';try{localStorage.setItem('view',choice);}catch(e){}render();};
+wideScreen.addEventListener('change',()=>{if(!choice)render();});
 $('footer').textContent='Données actualisées le '+data.updated+' · '+data.kept+' événements retenus sur '+data.total+' dans la source · '+data.unknown+' intitulés non reconnus (événements). La page hébergée est reconstruite toutes les 6 heures ; une copie téléchargée reste un instantané.';
 showToday();
 setInterval(()=>{if(dayKey(new Date())!==renderedDay){renderedDay=dayKey(new Date());render();}else updateDayProgress();},1000);

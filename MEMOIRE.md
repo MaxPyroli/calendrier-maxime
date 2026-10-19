@@ -1,5 +1,12 @@
 # Mémoire de reprise — 19 octobre 2026
 
+## Week-ends masqués (19 octobre 2026)
+
+- Demande utilisateur : enlever les samedis et dimanches, sans cours le week-end.
+- Constat avant de masquer : aucun événement ne touche un samedi ou un dimanche dans la période affichée (135 événements, 27/07/2026 → 17/01/2027), donc rien n'est caché.
+- `template.html` : le samedi et le dimanche ne sont plus rendus, sauf s'ils contiennent un événement (`hasEvents`, `touches` : un seul prédicat « l'événement touche ce jour » réutilisé par les cartes) ; l'intitulé de semaine s'arrête au dernier jour affiché (« 19 octobre – 23 octobre 2026 »). Décision de ma part, non demandée : ouverte un samedi ou un dimanche sans événement, la page et le bouton « Cette semaine » affichent la semaine suivante (sinon on tombait sur une semaine entièrement passée, sans carte « aujourd'hui »). À revenir en arrière si ce n'est pas souhaité (`showToday`).
+- Vérifié dans Chromium avec horloge simulée : semaine ordinaire (5 jours), samedi, dimanche, bouton « Cette semaine » un samedi, sélecteur de date sur un samedi, semaine transversale (1 bloc, plage jusqu'au vendredi), événement un samedi (le samedi réapparaît ; si c'est aujourd'hui on reste sur la semaine en cours). Régressions OK. Le vendredi étant le dernier élément de la page, il ne peut plus toujours remonter en haut de l'écran : le défilement s'arrête alors en bas de page.
+
 ## Semaine transversale : un seul bloc avec la vague (19 octobre 2026)
 
 - Demande utilisateur : afficher la semaine transversale sur toute la semaine. Première version (bandeau + étiquettes sur chaque jour) jugée « trop » ; consigne finale : garder l'affichage habituel mais remplacer les blocs de jours par **un seul bloc vertical** avec la vague habituelle qui défile sur la semaine. Aucun bandeau ni couleur dédiée.

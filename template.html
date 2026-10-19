@@ -60,6 +60,8 @@ function inDayHeading(e){return e.allDay || spansDays(e);}
 const dayName=new Intl.DateTimeFormat('fr-FR',{weekday:'long',timeZone:'Europe/Paris'}), tickDay=new Intl.DateTimeFormat('fr-FR',{weekday:'long',day:'numeric',timeZone:'UTC'});
 const weekLike=e=>spansDays(e) && /\bsemaine transversale\b/.test(e.title.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase());
 const lastDayKey=e=>dayKey(new Date(Date.parse(e.end)-1));
+const touches=(e,k)=>{const a=dayKey(new Date(e.start)), b=lastDayKey(e);return a<=k && (b>=k || a===k);};
+const hasEvents=k=>data.events.some(e=>touches(e,k));
 function parisStart(k){
  const [y,m,d]=k.split('-').map(Number);let t=Date.UTC(y,m-1,d)-2*3600000;
  while(dayKey(new Date(t))<k)t+=900000;
@@ -165,7 +167,7 @@ function updateDayProgress(){
 function render(){
 const key=iso(current), end=iso(add(current,7));$('date').value=key;
 $('prev').disabled=key<=data.first;$('next').disabled=key>=data.last;
-const lastDay=add(current,6), firstYear=current.getUTCFullYear(), lastYear=lastDay.getUTCFullYear();$('range').textContent=fmt.format(current)+(firstYear!==lastYear?' '+firstYear:'')+' – '+fmt.format(lastDay)+' '+lastYear;
+const lastIndex=[0,1,2,3,4,5,6].filter(i=>i<5||hasEvents(iso(add(current,i)))).pop(), lastDay=add(current,lastIndex), firstYear=current.getUTCFullYear(), lastYear=lastDay.getUTCFullYear();$('range').textContent=fmt.format(current)+(firstYear!==lastYear?' '+firstYear:'')+' – '+fmt.format(lastDay)+' '+lastYear;
 $('days').replaceChildren();let count=new Set();
 const thisWeek=data.events.filter(e=>weekLike(e) && dayKey(new Date(e.start))<end && lastDayKey(e)>=key), blockFor=new Map(), covered=new Set();
 for(const e of thisWeek){
@@ -173,10 +175,11 @@ for(const e of thisWeek){
  if(keys.length>1){blockFor.set(keys[0],{e,keys});keys.forEach(k=>covered.add(k));}
 }
 for(let i=0;i<7;i++){
+ if(i>=5 && !hasEvents(iso(add(current,i))))continue;
  {const k0=iso(add(current,i));if(covered.has(k0)){const block=blockFor.get(k0);if(block){const made=weekBlock(block.e,block.keys,block.keys.includes(dayKey(new Date())),count);$('days').append(made.section,made.label);}continue;}}
  const d=add(current,i), k=iso(d), section=node('section','','day'), heading=node('div','','day-heading');heading.append(node('h3',weekday.format(d)));section.append(heading);
  let progressPercent;
- const matches=data.events.filter(e=>{const a=dayKey(new Date(e.start)), b=dayKey(new Date(new Date(e.end).getTime()-1));return a<=k && (b>=k || a===k);}).sort((a,b)=>Date.parse(a.start)-Date.parse(b.start));
+ const matches=data.events.filter(e=>touches(e,k)).sort((a,b)=>Date.parse(a.start)-Date.parse(b.start));
  const schedule=daySchedule(matches.filter(e=>!weekLike(e)),k);
  const banners=matches.filter(inDayHeading), right=node('div','','day-heading-right'), today=dayKey(new Date());
  if(k<today){section.classList.add('day-progress','day-past');section.style.setProperty('--progress','100%');} if(k===today)section.classList.add('day-today');
@@ -201,7 +204,7 @@ layoutWeekItems();updateDayProgress();
 $('prev').onclick=()=>{current=add(current,-7);render();};$('next').onclick=()=>{current=add(current,7);render();};
 function select(d){current=monday(d);if(iso(current)<data.first)current=parse(data.first);if(iso(current)>data.last)current=parse(data.last);render();}
 $('date').min=data.first;$('date').max=iso(add(parse(data.last),6));$('date').onchange=()=>{if($('date').value)select(parse($('date').value));};
-function showToday(animate){select(parse(dayKey(new Date())));const wave=document.querySelector('.week-block.day-progress .week-here'), day=wave||document.querySelector('.day-today');if(day&&(wave||day!==$('days').firstElementChild))day.scrollIntoView({block:wave?'center':'start',behavior:animate&&!matchMedia('(prefers-reduced-motion: reduce)').matches?'smooth':'auto'});}
+function showToday(animate){const todayKey=dayKey(new Date()), todayDate=parse(todayKey), weekday=todayDate.getUTCDay(), restDay=(weekday===6||weekday===0)&&!hasEvents(todayKey);select(restDay?add(todayDate,weekday===6?2:1):todayDate);const wave=document.querySelector('.week-block.day-progress .week-here'), day=wave||document.querySelector('.day-today');if(day&&(wave||day!==$('days').firstElementChild))day.scrollIntoView({block:wave?'center':'start',behavior:animate&&!matchMedia('(prefers-reduced-motion: reduce)').matches?'smooth':'auto'});}
 $('today').onclick=()=>showToday(true);
 $('footer').textContent='Données actualisées le '+data.updated+' · '+data.kept+' événements retenus sur '+data.total+' dans la source · '+data.unknown+' intitulés non reconnus (événements). La page hébergée est reconstruite toutes les 6 heures ; une copie téléchargée reste un instantané.';
 showToday();

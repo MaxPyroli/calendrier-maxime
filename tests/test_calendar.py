@@ -59,7 +59,20 @@ class FilterTests(unittest.TestCase):
     def test_precedence_and_unknown(self):
         self.assertEqual(self.classify('ACOST', 'Ingénierie du trafic'), 'exclude')
         self.assertEqual(self.classify('Séance', 'Méthodes photo-vidéo'), 'keep')
-        self.assertEqual(self.classify('Semaine transversale 1'), 'unknown')
+        for title in ['Semaine transversale 1', 'Semaine transversale 2', 'semaine transversale']:
+            with self.subTest(title=title): self.assertEqual(self.classify(title), 'keep')
+        # règle volontairement stricte : un intitulé qui précise autre chose n'est pas deviné
+        self.assertEqual(self.classify('Semaine transversale 1 : Voyage'), 'unknown')
+
+    def test_intitules_confirmes_par_maxime(self):
+        for title in ['Données territoriales et de mobilité (3 groupes)', 'Séminaire pro',
+                      'Travail personnel et collectif', 'Présentation recherche stages Sandrine Vazquez',
+                      'Forum des métiers', 'Férié']:
+            with self.subTest(title=title): self.assertEqual(self.classify(title), 'keep')
+        # les règles restent strictes : un intitulé voisin n'est pas deviné
+        for title in ['Forum des métiers de la ville', 'Séminaire pro de l’atelier PAS', 'Travail personnel',
+                      'Données territoriales et de logement']:
+            with self.subTest(title=title): self.assertEqual(self.classify(title), 'unknown')
         self.assertEqual(self.classify('Économie des transports débutants'), 'unknown')
         self.assertEqual(self.classify('SIG analyse données de mobilité'), 'keep')
 

@@ -20,11 +20,14 @@
 
 @keyframes course-water-sway{0%,100%{transform:translateY(calc(-1 * var(--sway,0px)))}50%{transform:translateY(var(--sway,0px))}}
 @media(prefers-reduced-motion:reduce){.day-water{animation:none}}
-.day-today{scroll-margin-top:12px}</style></head><body><main>
+.day-today{scroll-margin-top:12px}
+.week-block .day-heading{margin-bottom:6px}.week-axis{position:relative;margin:14px 0 8px}
+.week-tick{position:absolute;left:0;right:0;height:0;border-top:1px dashed #cfdcd6}.week-tick span{position:absolute;right:0;top:5px;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#7a9a91}
+.week-item{position:absolute;left:0;right:88px;margin:0}.week-here{position:absolute;left:0;right:0;top:var(--surface,0px);height:0;pointer-events:none}.week-dry .day-water{display:none}</style></head><body><main>
 <header><div class="eyebrow">M2 TRAME / TRANSPORTS & MOBILITÉS</div><h1>Ma semaine de cours.</h1><p>Le programme de Maxime, jour par jour : socle commun et enseignements attribués. Horaires en heure de Paris.</p></header>
 <nav aria-label="Choisir une semaine"><button id="prev" aria-label="Semaine précédente">←</button><button id="today">Cette semaine</button><label for="date">Date</label><input id="date" type="date"><button id="next" aria-label="Semaine suivante">→</button></nav>
 <h2 id="range"></h2><div id="stats" aria-live="polite"></div><div class="grid" id="days"></div>
-<div class="notice">Seuls les cours identifiés sont affichés. Un intitulé ambigu, comme « Semaine transversale 1 », reste masqué tant que l’atelier n’est pas précisé. Une semaine vide ne garantit pas l’absence de cours.</div>
+<div class="notice">Seuls les cours identifiés sont affichés. Un intitulé non reconnu reste masqué par prudence. Une semaine vide ne garantit pas l’absence de cours.</div>
 <footer id="footer"></footer><p><a href="https://calendar.google.com/calendar/ical/m2.tm.orga%40gmail.com/public/basic.ics">Consulter la source commune</a></p>
 </main><script type="application/json" id="data">__CALENDAR_DATA__</script><script>
 'use strict';
@@ -54,9 +57,62 @@ function boundary(label,date,extra=''){const box=node('div','','day-boundary '+e
 function lunchCard(lunch){const box=node('aside','','lunch'), duration=Math.round((lunch.end-lunch.start)/60000), h=Math.floor(duration/60), m=duration%60;box.append(node('strong','Pause déjeuner'),node('p',(h?h+' h ':'')+(m?m+' min':'')));return box;}
 function spansDays(e){return dayKey(new Date(e.start))!==dayKey(new Date(Math.max(new Date(e.start).getTime(),new Date(e.end).getTime()-1)));}
 function inDayHeading(e){return e.allDay || spansDays(e);}
+const dayName=new Intl.DateTimeFormat('fr-FR',{weekday:'long',timeZone:'Europe/Paris'}), tickDay=new Intl.DateTimeFormat('fr-FR',{weekday:'long',day:'numeric',timeZone:'UTC'});
+const weekLike=e=>spansDays(e) && /\bsemaine transversale\b/.test(e.title.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase());
+const lastDayKey=e=>dayKey(new Date(Date.parse(e.end)-1));
+function parisStart(k){
+ const [y,m,d]=k.split('-').map(Number);let t=Date.UTC(y,m-1,d)-2*3600000;
+ while(dayKey(new Date(t))<k)t+=900000;
+ while(dayKey(new Date(t-900000))>=k)t-=900000;
+ return t;
+}
+// Les autres événements de la semaine sont posés dans le bloc, à leur place sur l'axe du temps.
+function weekItem(o,from,to,height){
+ const card=node('article','','course week-item'), wholeDay=o.allDay||spansDays(o);
+ const start=wholeDay?parisStart(dayKey(new Date(o.start))):Date.parse(o.start);
+ card.dataset.top=Math.min(height,Math.max(0,(start-from)/(to-from)*height));
+ card.append(node('time',wholeDay?'Toute la journée':clock.format(new Date(o.start))+' – '+clock.format(new Date(o.end))),node('h4',o.title));
+ if(o.room)card.append(node('p',(o.room.includes(' · ')?'📍 Plusieurs salles (ton groupe est à préciser) : ':'📍 ')+o.room,'room'));
+ return card;
+}
+// Un seul bloc vertical pour une semaine entière : la vague descend de façon continue du début à la fin réels de l'événement.
+function weekBlock(e,keys,hasToday,count){
+ const section=node('section','','day week-block'), heading=node('div','','day-heading'), axis=node('div','','week-axis'), label=node('span','0 %','day-progress-percent week-percent');
+ const from=Math.max(Date.parse(e.start),parisStart(keys[0])), to=Math.min(Date.parse(e.end),parisStart(iso(add(parse(keys[keys.length-1]),1)))), height=110*keys.length;
+ section.dataset.from=from;section.dataset.to=to;section.setAttribute('aria-label',e.title);label.hidden=true;
+ if(hasToday)section.classList.add('day-today');
+ heading.append(node('h3',e.title));axis.style.height=height+'px';
+ keys.slice(1).forEach(k=>{const share=(parisStart(k)-from)/(to-from);if(share>0&&share<1){const tick=node('div','','week-tick');tick.style.top=(share*100)+'%';tick.append(node('span',tickDay.format(parse(k))));axis.append(tick);}});
+ for(const o of data.events)if(!weekLike(o) && Date.parse(o.end)>from && Date.parse(o.start)<to){axis.append(weekItem(o,from,to,height));count.add(o);}
+ const water=node('div','','day-water');water.setAttribute('aria-hidden','true');
+ section.append(heading,boundary('Début · '+dayName.format(new Date(from)),new Date(from)),axis,boundary('Fin · '+dayName.format(new Date(to-1)),new Date(to),'day-end'),water,node('span','','week-here'));
+ return {section,label};
+}
+function layoutWeekItems(){
+ document.querySelectorAll('.week-block').forEach(section=>{
+  const axis=section.querySelector('.week-axis');let floor=0;
+  [...axis.querySelectorAll('.week-item')].sort((a,b)=>a.dataset.top-b.dataset.top).forEach(item=>{
+   const top=Math.max(Number(item.dataset.top),floor);item.style.top=top+'px';floor=top+item.offsetHeight+8;
+  });
+  if(floor-8>axis.offsetHeight)axis.style.height=(floor-8)+'px';
+ });
+}
+function updateWeekBlocks(){
+ const now=Date.now();
+ document.querySelectorAll('.week-block').forEach(section=>{
+  const from=Number(section.dataset.from), to=Number(section.dataset.to), axis=section.querySelector('.week-axis'), label=section.nextElementSibling;
+  const live=now>=from && now<to;
+  section.classList.toggle('week-dry',now<from);section.classList.toggle('day-complete',now>=to);section.classList.toggle('day-progress',live);
+  label.hidden=!live;if(!live)return;
+  const ratio=(now-from)/(to-from), surface=axis.offsetTop+axis.offsetHeight*ratio, percent=Math.min(99,Math.round(ratio*100));
+  section.style.setProperty('--surface',surface+'px');section.style.setProperty('--sway',Math.min(12,Math.max(0,section.offsetHeight-surface-8))+'px');
+  label.textContent=percent+' %';label.style.top=(section.offsetTop+surface)+'px';label.style.left=(section.offsetLeft+section.offsetWidth+12)+'px';
+  section.setAttribute('aria-label',section.querySelector('h3').textContent+' : '+percent+' % écoulée');
+ });
+}
 function eventBadge(e){
  const multi=spansDays(e), badge=node('div','','day-badge'+(multi?' multi':''));
- badge.append(node('strong',e.title));
+ badge.append(node('strong',weekLike(e)?e.title.replace(/^semaine\s+/i,'').replace(/^./,c=>c.toUpperCase()):e.title));
  return badge;
 }
 function courseSurface(cards,now,height,midnight){
@@ -78,6 +134,7 @@ function courseSurface(cards,now,height,midnight){
  return Math.max(0,Math.min(height,surface,next?next.top:height));
 }
 function updateDayProgress(){
+ updateWeekBlocks();
  const now=new Date(), today=dayKey(now);
  document.querySelectorAll('.day-progress').forEach(section=>{
   if(section.dataset.day!==today)return;
@@ -98,7 +155,7 @@ function updateDayProgress(){
   section.style.setProperty('--sway',Math.min(12,clearance)+'px');
   
   section.classList.toggle('day-complete',now>=end);
-  const label=$('days').querySelector('.day-progress-percent');
+  const label=$('days').querySelector('.day-progress-percent:not(.week-percent)');
   label.textContent=percent+' %';
   label.style.top=(section.offsetTop+surface)+'px';
   label.style.left=(section.offsetLeft+section.offsetWidth+12)+'px';
@@ -110,15 +167,21 @@ const key=iso(current), end=iso(add(current,7));$('date').value=key;
 $('prev').disabled=key<=data.first;$('next').disabled=key>=data.last;
 const lastDay=add(current,6), firstYear=current.getUTCFullYear(), lastYear=lastDay.getUTCFullYear();$('range').textContent=fmt.format(current)+(firstYear!==lastYear?' '+firstYear:'')+' – '+fmt.format(lastDay)+' '+lastYear;
 $('days').replaceChildren();let count=new Set();
+const thisWeek=data.events.filter(e=>weekLike(e) && dayKey(new Date(e.start))<end && lastDayKey(e)>=key), blockFor=new Map(), covered=new Set();
+for(const e of thisWeek){
+ const keys=[];for(let i=0;i<7;i++){const k=iso(add(current,i));if(dayKey(new Date(e.start))<=k && k<=lastDayKey(e))keys.push(k);}
+ if(keys.length>1){blockFor.set(keys[0],{e,keys});keys.forEach(k=>covered.add(k));}
+}
 for(let i=0;i<7;i++){
+ {const k0=iso(add(current,i));if(covered.has(k0)){const block=blockFor.get(k0);if(block){const made=weekBlock(block.e,block.keys,block.keys.includes(dayKey(new Date())),count);$('days').append(made.section,made.label);}continue;}}
  const d=add(current,i), k=iso(d), section=node('section','','day'), heading=node('div','','day-heading');heading.append(node('h3',weekday.format(d)));section.append(heading);
  let progressPercent;
  const matches=data.events.filter(e=>{const a=dayKey(new Date(e.start)), b=dayKey(new Date(new Date(e.end).getTime()-1));return a<=k && (b>=k || a===k);}).sort((a,b)=>Date.parse(a.start)-Date.parse(b.start));
- const schedule=daySchedule(matches,k);
+ const schedule=daySchedule(matches.filter(e=>!weekLike(e)),k);
  const banners=matches.filter(inDayHeading), right=node('div','','day-heading-right'), today=dayKey(new Date());
  if(k<today){section.classList.add('day-progress','day-past');section.style.setProperty('--progress','100%');} if(k===today)section.classList.add('day-today');
  if(schedule && k===today){section.classList.add('day-progress');section.dataset.day=k;section.dataset.start=schedule.start.toISOString();section.dataset.end=schedule.end.toISOString();progressPercent=node('span','0 %','day-progress-percent');}
- if(banners.length){const badges=node('div','','day-badges');for(const e of banners){badges.append(eventBadge(e));count.add(e);}right.append(badges);}
+ if(banners.length){const badges=node('div','','day-badges');for(const e of banners){badges.append(eventBadge(e));if(!weekLike(e))count.add(e);}right.append(badges);}
  if(right.children.length)heading.append(right);
  if(!matches.length)section.append(node('p','Aucun cours identifié','empty'));
  if(schedule)section.append(boundary('Premier cours',schedule.start));
@@ -132,13 +195,13 @@ for(let i=0;i<7;i++){
  if(k<today){const water=node('div','','day-water');water.setAttribute('aria-hidden','true');section.append(water);}
  if(progressPercent){const water=node('div','','day-water');water.setAttribute('aria-hidden','true');section.append(water);$('days').append(progressPercent);}
 }
-$('stats').textContent=count.size+' séance'+(count.size>1?'s':'')+' identifiée'+(count.size>1?'s':'')+' cette semaine';
-updateDayProgress();
+$('stats').textContent=count.size+' séance'+(count.size>1?'s':'')+' identifiée'+(count.size>1?'s':'')+' cette semaine'+(thisWeek.length?' · '+thisWeek.map(e=>e.title).join(', '):'');
+layoutWeekItems();updateDayProgress();
 }
 $('prev').onclick=()=>{current=add(current,-7);render();};$('next').onclick=()=>{current=add(current,7);render();};
 function select(d){current=monday(d);if(iso(current)<data.first)current=parse(data.first);if(iso(current)>data.last)current=parse(data.last);render();}
 $('date').min=data.first;$('date').max=iso(add(parse(data.last),6));$('date').onchange=()=>{if($('date').value)select(parse($('date').value));};
-function showToday(animate){select(parse(dayKey(new Date())));const day=document.querySelector('.day-today');if(day&&day!==$('days').firstElementChild)day.scrollIntoView({block:'start',behavior:animate&&!matchMedia('(prefers-reduced-motion: reduce)').matches?'smooth':'auto'});}
+function showToday(animate){select(parse(dayKey(new Date())));const wave=document.querySelector('.week-block.day-progress .week-here'), day=wave||document.querySelector('.day-today');if(day&&(wave||day!==$('days').firstElementChild))day.scrollIntoView({block:wave?'center':'start',behavior:animate&&!matchMedia('(prefers-reduced-motion: reduce)').matches?'smooth':'auto'});}
 $('today').onclick=()=>showToday(true);
 $('footer').textContent='Données actualisées le '+data.updated+' · '+data.kept+' événements retenus sur '+data.total+' dans la source · '+data.unknown+' intitulés non reconnus (événements). La page hébergée est reconstruite toutes les 6 heures ; une copie téléchargée reste un instantané.';
 showToday();

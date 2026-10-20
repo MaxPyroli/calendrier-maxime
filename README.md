@@ -56,6 +56,8 @@ Accès, par ordre de préférence (Settings → Secrets and variables → Action
 1. `MYMRS_LOGIN` + `MYMRS_PASSWORD`, durable. Si le mot de passe commence par un caractère spécial et que le champ le refuse, fournir `MYMRS_PASSWORD_HEX` à la place : le mot de passe en hexadécimal. Dans la console du navigateur : `[...new TextEncoder().encode(prompt('Mot de passe ?'))].map(b=>b.toString(16).padStart(2,'0')).join('')`.
 2. `MYMRS_TOKEN`, le jeton de l'appli (`token=` dans la requête `connexion.cfc`), sans mot de passe mais **susceptible d'expirer après quelques jours** : le journal indique alors « Jeton refusé ou expiré ».
 
+Les jours de semaine, de 7 h à 14 h 30 (heure de Paris), le workflow repasse toutes les 30 minutes mais ne contacte myMRS que si `menu.json` ne contient encore aucun menu pour aujourd'hui (`python menu.py --only-if-missing`) : quand myMRS publie tard, le menu apparaît donc dans la demi-heure.
+
 Un lancement manuel du workflow avec l'option « essai » affiche la forme des réponses et le menu obtenu sans rien publier.
 
 ```sh

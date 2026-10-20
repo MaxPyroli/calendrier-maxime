@@ -3,6 +3,8 @@ name: Actualiser le calendrier
 on:
   schedule:
     - cron: '17 */6 * * *'
+    # Matinées de semaine : tant que le menu du jour n'est pas publié par myMRS, nouvel essai toutes les 30 min.
+    - cron: '5,35 5-12 * * 1-5'
   workflow_dispatch:
     inputs:
       essai:
@@ -66,7 +68,9 @@ jobs:
         run: |
           # Si myMRS refuse l'accès, on reconstruit quand même la page (nouvelle mise en page)
           # depuis le dernier menu enregistré et on le signale par un avertissement.
-          if ! python menu.py; then
+          # Les passages toutes les 30 min ne contactent myMRS que si le menu du jour manque encore.
+          if [ "${{ github.event.schedule }}" = "5,35 5-12 * * 1-5" ]; then ONLY=--only-if-missing; else ONLY=; fi
+          if ! python menu.py $ONLY; then
             echo "::warning title=Menu cantine::myMRS a refusé l'accès, le menu n'est pas actualisé (voir l'erreur ci-dessus)."
             python menu.py --render-only || true
           fi

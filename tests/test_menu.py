@@ -148,6 +148,26 @@ class MenuTests(unittest.TestCase):
             with mock.patch.object(menu, 'DATA_FILE', saved), mock.patch('sys.argv', ['menu.py', '--render-only', '--output', str(out)]):
                 with self.assertRaises(SystemExit): menu.main()
 
+    def test_has_current_menu(self):
+        with tempfile.TemporaryDirectory() as folder:
+            saved = Path(folder) / 'menu.json'
+            self.assertFalse(menu.has_current_menu(saved, date(2026, 10, 19)))  # fichier absent
+            saved.write_text(json.dumps({'days': [{'date': '2026-10-15'}, {'date': '2026-10-16'}]}), encoding='utf-8')
+            self.assertFalse(menu.has_current_menu(saved, date(2026, 10, 19)))  # menu de la semaine passée
+            self.assertTrue(menu.has_current_menu(saved, date(2026, 10, 16)))
+            saved.write_text('{pas du json', encoding='utf-8')
+            self.assertFalse(menu.has_current_menu(saved, date(2026, 10, 16)))
+
+    def test_only_if_missing_skips_myMRS_when_menu_is_current(self):
+        today = datetime.now(ZoneInfo('Europe/Paris')).date().isoformat()
+        with tempfile.TemporaryDirectory() as folder:
+            saved = Path(folder) / 'menu.json'
+            saved.write_text(json.dumps({'days': [{'date': today}]}), encoding='utf-8')
+            with mock.patch.object(menu, 'DATA_FILE', saved), mock.patch('sys.argv', ['menu.py', '--only-if-missing']), \
+                    mock.patch.object(menu, 'urlopen', side_effect=AssertionError('réseau interdit')), \
+                    contextlib.redirect_stdout(io.StringIO()):
+                menu.main()
+
     def test_real_shape_dates_descending(self):
         # Forme observée dans un export réel de l'appli : jours dans l'ordre décroissant, plats avec identifiants.
         recipe = lambda lib, typ: {'RECETTEID': 1, 'RECETTELIB': lib, 'RECETTEPHOTO': '', 'TYPOID': 2, 'TYPONAME': typ}

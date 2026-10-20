@@ -235,10 +235,21 @@ def diagnostic(identity, today, opener=urlopen):
     print(json.dumps(report, ensure_ascii=False, indent=1))
 
 
+def has_current_menu(path, today):
+    """Vrai si menu.json contient au moins un jour à partir d'aujourd'hui."""
+    try:
+        days = json.loads(path.read_text(encoding='utf-8'))['days']
+        return any(parse_day(d.get('date')) >= today for d in days)
+    except (OSError, ValueError, KeyError, TypeError, AttributeError):
+        return False
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, default=ROOT / 'menu.html')
     parser.add_argument('--diagnostic', action='store_true', help='affiche la forme des réponses, ne publie rien')
+    parser.add_argument('--only-if-missing', action='store_true',
+                        help="ne contacte myMRS que si menu.json ne contient aucun menu pour aujourd'hui ou plus tard")
     parser.add_argument('--render-only', action='store_true',
                         help="reconstruit la page depuis menu.json sans interroger myMRS (nouvelle mise en page, menu inchangé)")
     args = parser.parse_args()
@@ -249,6 +260,9 @@ def main():
             sys.exit('Erreur : menu.json introuvable ou illisible.')
         atomic_write(args.output, render(data).encode('utf-8'))
         print(f"Page reconstruite depuis menu.json (menu du {data.get('updated', '?')}).")
+        return
+    if args.only_if_missing and has_current_menu(DATA_FILE, datetime.now(PARIS).date()):
+        print("Menu déjà à jour pour aujourd'hui : myMRS n'est pas interrogé.")
         return
     try:
         identities = identities_from_env()

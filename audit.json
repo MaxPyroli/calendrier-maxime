@@ -8594,7 +8594,7 @@
   {
     "uid": "u551f7hd8ncvdh8r63mqgrt728@google.com",
     "summary": "UE4 Usages, usagers, pratiques sociales",
-    "start": "vDDDTypes(2026-10-21 12:00:00+00:00, Parameters({}))",
+    "start": "vDDDTypes(2026-10-21 13:30:00+00:00, Parameters({}))",
     "classification": "keep",
     "rules": [
       "commun-usages"

@@ -1,40 +1,6 @@
 {
  "days": [
   {
-   "date": "2026-10-19",
-   "restaurants": [
-    {
-     "name": "Restaurant Principal",
-     "items": [
-      {
-       "type": "Saine Attitude",
-       "label": "Falafels sauce au yaourth Grec"
-      },
-      {
-       "type": "Le Marché",
-       "label": "Dos de lieu noir en croûte de parmesan"
-      },
-      {
-       "type": "BBQ & Co",
-       "label": "Entrecôte / steak de boeuf"
-      },
-      {
-       "type": "Trattoria",
-       "label": "Feuilleté aux chèvres sur confit d'oignons et tomates"
-      },
-      {
-       "type": "Bistronomie",
-       "label": "haut de cuisse de poulet à la marinade"
-      },
-      {
-       "type": "Les Comptoirs",
-       "label": "Sauté de boeuf aux oignons"
-      }
-     ]
-    }
-   ]
-  },
-  {
    "date": "2026-10-20",
    "restaurants": [
     {
@@ -147,6 +113,6 @@
    ]
   }
  ],
- "updated": "20/10/2026 à 23:34",
- "updatedAt": "2026-10-20T23:34+02:00"
+ "updated": "21/10/2026 à 06:41",
+ "updatedAt": "2026-10-21T06:41+02:00"
 }

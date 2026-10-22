@@ -1,40 +1,6 @@
 {
  "days": [
   {
-   "date": "2026-10-20",
-   "restaurants": [
-    {
-     "name": "Restaurant Principal",
-     "items": [
-      {
-       "type": "Saine Attitude",
-       "label": "La caponata d'aubergines, burrata crémeuse"
-      },
-      {
-       "type": "Le Marché",
-       "label": "Pavé de cabillaud à la Grenobloise"
-      },
-      {
-       "type": "BBQ & Co",
-       "label": "steak haché"
-      },
-      {
-       "type": "Trattoria",
-       "label": "Quiche aux poireaux"
-      },
-      {
-       "type": "Bistronomie",
-       "label": "Escalope de dinde tandoori"
-      },
-      {
-       "type": "Les Comptoirs",
-       "label": "Côte de porc charcutière"
-      }
-     ]
-    }
-   ]
-  },
-  {
    "date": "2026-10-21",
    "restaurants": [
     {
@@ -113,6 +79,6 @@
    ]
   }
  ],
- "updated": "21/10/2026 à 23:38",
- "updatedAt": "2026-10-21T23:38+02:00"
+ "updated": "22/10/2026 à 06:38",
+ "updatedAt": "2026-10-22T06:38+02:00"
 }

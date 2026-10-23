@@ -1,36 +1,6 @@
 {
  "days": [
   {
-   "date": "2026-10-21",
-   "restaurants": [
-    {
-     "name": "Restaurant Principal",
-     "items": [
-      {
-       "type": "Saine Attitude",
-       "label": "Menu végé : Burger végétarien"
-      },
-      {
-       "type": "BBQ & Co",
-       "label": "Menu végé : Knack végétal"
-      },
-      {
-       "type": "Trattoria",
-       "label": "Menu végé : Risotto aux champignons"
-      },
-      {
-       "type": "Bistronomie",
-       "label": "Menu végé : Dhal de lentilles corail aux petits légumes"
-      },
-      {
-       "type": "Les Comptoirs",
-       "label": "Menu végé : Quinoa aux légumes, hoummos de haricots blanc"
-      }
-     ]
-    }
-   ]
-  },
-  {
    "date": "2026-10-22",
    "restaurants": [
     {
@@ -79,6 +49,6 @@
    ]
   }
  ],
- "updated": "22/10/2026 à 23:32",
- "updatedAt": "2026-10-22T23:32+02:00"
+ "updated": "23/10/2026 à 06:44",
+ "updatedAt": "2026-10-23T06:44+02:00"
 }

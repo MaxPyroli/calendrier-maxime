@@ -8946,7 +8946,7 @@
   {
     "uid": "5g5m3fgnirpsi614j0nijh2eak@google.com",
     "summary": "Socio-économie de la mobilité",
-    "start": "vDDDTypes(2026-11-10 08:00:00+00:00, Parameters({}))",
+    "start": "vDDDTypes(2026-11-10 09:00:00+00:00, Parameters({}))",
     "classification": "keep",
     "rules": [
       "socio-economie"
@@ -9073,6 +9073,17 @@
       "trafic"
     ],
     "kept": false,
+    "series_blocked": false
+  },
+  {
+    "uid": "4j73hachnpj0c84t92n02qgra6@google.com",
+    "summary": "Socio-économie de la mobilité",
+    "start": "vDDDTypes(2026-11-24 09:00:00+00:00, Parameters({}))",
+    "classification": "keep",
+    "rules": [
+      "socio-economie"
+    ],
+    "kept": true,
     "series_blocked": false
   },
   {

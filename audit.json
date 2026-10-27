@@ -8889,17 +8889,6 @@
     "series_blocked": false
   },
   {
-    "uid": "1hbfoc84f35ej2r2qkfo4stvjk@google.com",
-    "summary": "Présentation recherche stages Sandrine Vazquez",
-    "start": "vDDDTypes(2026-11-05 13:00:00+00:00, Parameters({}))",
-    "classification": "keep",
-    "rules": [
-      "presentation-recherche-stages"
-    ],
-    "kept": true,
-    "series_blocked": false
-  },
-  {
     "uid": "rrqn4r5cjn067hchco3stabf2o@google.com",
     "summary": "Atelier (journée)",
     "start": "vDDDTypes(2026-11-06 08:00:00+00:00, Parameters({}))",
@@ -9005,6 +8994,17 @@
     "classification": "keep",
     "rules": [
       "enjeux"
+    ],
+    "kept": true,
+    "series_blocked": false
+  },
+  {
+    "uid": "1hbfoc84f35ej2r2qkfo4stvjk@google.com",
+    "summary": "Présentation recherche stages Sandrine Vazquez",
+    "start": "vDDDTypes(2026-11-12 13:00:00+00:00, Parameters({}))",
+    "classification": "keep",
+    "rules": [
+      "presentation-recherche-stages"
     ],
     "kept": true,
     "series_blocked": false

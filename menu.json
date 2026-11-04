@@ -1,40 +1,6 @@
 {
  "days": [
   {
-   "date": "2026-11-03",
-   "restaurants": [
-    {
-     "name": "Restaurant Principal",
-     "items": [
-      {
-       "type": "Saine Attitude",
-       "label": "Flan de légumes au tofu"
-      },
-      {
-       "type": "Le Marché",
-       "label": "Dos de merlu en croûte d'herbes"
-      },
-      {
-       "type": "BBQ & Co",
-       "label": "Haché de veau au poivre"
-      },
-      {
-       "type": "Trattoria",
-       "label": "Bourguignon de champignons, carottes et oignons grelots"
-      },
-      {
-       "type": "Bistronomie",
-       "label": "blanquette de volaille"
-      },
-      {
-       "type": "Les Comptoirs",
-       "label": "Rognon de boeuf sauce madère"
-      }
-     ]
-    }
-   ]
-  },
-  {
    "date": "2026-11-04",
    "restaurants": [
     {
@@ -121,6 +87,6 @@
    ]
   }
  ],
- "updated": "04/11/2026 à 15:26",
- "updatedAt": "2026-11-04T15:26+01:00"
+ "updated": "05/11/2026 à 00:37",
+ "updatedAt": "2026-11-05T00:37+01:00"
 }

@@ -1,40 +1,6 @@
 {
  "days": [
   {
-   "date": "2026-11-04",
-   "restaurants": [
-    {
-     "name": "Restaurant Principal",
-     "items": [
-      {
-       "type": "Saine Attitude",
-       "label": "Boulette de pois chiches à l'oriental"
-      },
-      {
-       "type": "Le Marché",
-       "label": "Parmentier de poisson"
-      },
-      {
-       "type": "BBQ & Co",
-       "label": "Escalope de dinde"
-      },
-      {
-       "type": "Trattoria",
-       "label": "Croziflette aux poireaux et oignons"
-      },
-      {
-       "type": "Bistronomie",
-       "label": "Boudin blanc"
-      },
-      {
-       "type": "Les Comptoirs",
-       "label": "Gigot d'agneau à la crème d'aïl"
-      }
-     ]
-    }
-   ]
-  },
-  {
    "date": "2026-11-05",
    "restaurants": [
     {
@@ -79,6 +45,6 @@
    ]
   }
  ],
- "updated": "05/11/2026 à 20:54",
- "updatedAt": "2026-11-05T20:54+01:00"
+ "updated": "06/11/2026 à 07:35",
+ "updatedAt": "2026-11-06T07:35+01:00"
 }

@@ -10618,7 +10618,7 @@
   {
     "uid": "8rgn2f9vti5i3vl4f86rqeek5s@google.com",
     "summary": "Transitions",
-    "start": "vDDDTypes(2027-03-03 08:30:00+00:00, Parameters({}))",
+    "start": "vDDDTypes(2027-03-03 08:00:00+00:00, Parameters({}))",
     "classification": "keep",
     "rules": [
       "commun-transitions"

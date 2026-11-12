@@ -9978,23 +9978,23 @@
     "series_blocked": false
   },
   {
-    "uid": "i4ig2sa3r97hvohjuau8jbbur4@google.com",
-    "summary": "Modèles économiques et sobriété",
-    "start": "vDDDTypes(2027-01-19 12:00:00+00:00, Parameters({}))",
-    "classification": "exclude",
-    "rules": [
-      "ris"
-    ],
-    "kept": false,
-    "series_blocked": false
-  },
-  {
     "uid": "jeqm0ndnr4s35mevk118od3jvs@google.com",
     "summary": "Systèmes de mobilité dans le monde",
     "start": "vDDDTypes(2027-01-19 12:00:00+00:00, Parameters({}))",
     "classification": "exclude",
     "rules": [
       "mobilite-monde"
+    ],
+    "kept": false,
+    "series_blocked": false
+  },
+  {
+    "uid": "i4ig2sa3r97hvohjuau8jbbur4@google.com",
+    "summary": "Modèles économiques et sobriété",
+    "start": "vDDDTypes(2027-01-19 13:00:00+00:00, Parameters({}))",
+    "classification": "exclude",
+    "rules": [
+      "ris"
     ],
     "kept": false,
     "series_blocked": false
@@ -10123,7 +10123,7 @@
   {
     "uid": "uvmkfj24anm6nj8m16d1v1egag@google.com",
     "summary": "Modèles économiques et sobriété",
-    "start": "vDDDTypes(2027-01-26 12:00:00+00:00, Parameters({}))",
+    "start": "vDDDTypes(2027-01-26 12:30:00+00:00, Parameters({}))",
     "classification": "exclude",
     "rules": [
       "ris"
@@ -10519,7 +10519,7 @@
   {
     "uid": "r9uovej1dk35knquek2ggk9q74@google.com",
     "summary": "Préparation du voyage d'études",
-    "start": "vDDDTypes(2027-02-23 12:00:00+00:00, Parameters({}))",
+    "start": "vDDDTypes(2027-02-23 13:00:00+00:00, Parameters({}))",
     "classification": "keep",
     "rules": [
       "voyage"
@@ -10530,7 +10530,7 @@
   {
     "uid": "0utnanuvbbngh7opfb4nnhjmmo@google.com",
     "summary": "Atelier",
-    "start": "vDDDTypes(2027-02-23 14:00:00+00:00, Parameters({}))",
+    "start": "vDDDTypes(2027-02-23 15:00:00+00:00, Parameters({}))",
     "classification": "keep",
     "rules": [
       "projet"

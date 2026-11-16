@@ -9142,17 +9142,6 @@
     "series_blocked": false
   },
   {
-    "uid": "7fkc8l86umgu3mgnvuqiuhj5jc@google.com",
-    "summary": "UE4 Usages, usagers, pratiques sociales",
-    "start": "vDDDTypes(2026-11-25 15:00:00+00:00, Parameters({}))",
-    "classification": "keep",
-    "rules": [
-      "commun-usages"
-    ],
-    "kept": true,
-    "series_blocked": false
-  },
-  {
     "uid": "jp3ur9c11sklnbaam4evhah8v8@google.com",
     "summary": "UE1 Controverses sociotechniques (3 groupes)",
     "start": "vDDDTypes(2026-11-26 08:30:00+00:00, Parameters({}))",
@@ -9296,6 +9285,17 @@
     "series_blocked": false
   },
   {
+    "uid": "7fkc8l86umgu3mgnvuqiuhj5jc@google.com",
+    "summary": "UE4 Usages, usagers, pratiques sociales",
+    "start": "vDDDTypes(2026-12-03 13:00:00+00:00, Parameters({}))",
+    "classification": "keep",
+    "rules": [
+      "commun-usages"
+    ],
+    "kept": true,
+    "series_blocked": false
+  },
+  {
     "uid": "sk8iu8a9n2ifh3358p5vocucbg@google.com",
     "summary": "UE5 Enjeux de récits, d'images et d'imaginaires",
     "start": "vDDDTypes(2026-12-04 08:00:00+00:00, Parameters({}))",
@@ -9373,12 +9373,12 @@
     "series_blocked": false
   },
   {
-    "uid": "05a4q9tmh0eblrjj81428evopc@google.com",
-    "summary": "UE3 Planification, gouvernance, politiques et action publique",
+    "uid": "23eontpdsomsa0oahksbr4eng8@google.com",
+    "summary": "Atelier",
     "start": "vDDDTypes(2026-12-08 15:30:00+00:00, Parameters({}))",
     "classification": "keep",
     "rules": [
-      "commun-planification"
+      "projet"
     ],
     "kept": true,
     "series_blocked": false
@@ -9538,12 +9538,12 @@
     "series_blocked": false
   },
   {
-    "uid": "23eontpdsomsa0oahksbr4eng8@google.com",
-    "summary": "Atelier",
+    "uid": "05a4q9tmh0eblrjj81428evopc@google.com",
+    "summary": "UE3 Planification, gouvernance, politiques et action publique",
     "start": "vDDDTypes(2026-12-15 15:00:00+00:00, Parameters({}))",
     "classification": "keep",
     "rules": [
-      "projet"
+      "commun-planification"
     ],
     "kept": true,
     "series_blocked": false

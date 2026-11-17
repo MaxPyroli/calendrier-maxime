@@ -10211,7 +10211,7 @@
   {
     "uid": "armoqf8ip61vqdruop5308pfuo@google.com",
     "summary": "Transitions",
-    "start": "vDDDTypes(2027-02-08 08:30:00+00:00, Parameters({}))",
+    "start": "vDDDTypes(2027-02-08 07:30:00+00:00, Parameters({}))",
     "classification": "keep",
     "rules": [
       "commun-transitions"

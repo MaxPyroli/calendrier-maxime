@@ -1,40 +1,6 @@
 {
  "days": [
   {
-   "date": "2026-11-17",
-   "restaurants": [
-    {
-     "name": "Restaurant Principal",
-     "items": [
-      {
-       "type": "Saine Attitude",
-       "label": "Pâtes farçie \"Malffati\" 4 fromages"
-      },
-      {
-       "type": "Le Marché",
-       "label": "Pavé de cabillaud au paprika"
-      },
-      {
-       "type": "BBQ & Co",
-       "label": "steak haché"
-      },
-      {
-       "type": "Trattoria",
-       "label": "Pastilla de butternut et compotée d'oignons"
-      },
-      {
-       "type": "Bistronomie",
-       "label": "Filet mignon de porc caramélisé"
-      },
-      {
-       "type": "Les Comptoirs",
-       "label": "Sauté de veau au basilic"
-      }
-     ]
-    }
-   ]
-  },
-  {
    "date": "2026-11-18",
    "restaurants": [
     {
@@ -117,6 +83,6 @@
    ]
   }
  ],
- "updated": "18/11/2026 à 21:27",
- "updatedAt": "2026-11-18T21:27+01:00"
+ "updated": "19/11/2026 à 08:18",
+ "updatedAt": "2026-11-19T08:18+01:00"
 }

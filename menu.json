@@ -1,36 +1,6 @@
 {
  "days": [
   {
-   "date": "2026-11-18",
-   "restaurants": [
-    {
-     "name": "Restaurant Principal",
-     "items": [
-      {
-       "type": "Saine Attitude",
-       "label": "Menu végé : Tranche épaisse de céleri rôti, mousseline aux agrumes"
-      },
-      {
-       "type": "BBQ & Co",
-       "label": "Steak végétal"
-      },
-      {
-       "type": "Trattoria",
-       "label": "Menu végé : Chakchouka à la courge"
-      },
-      {
-       "type": "Bistronomie",
-       "label": "Menu végé : Hot Dog végétarien"
-      },
-      {
-       "type": "Les Comptoirs",
-       "label": "Pinsa romana aux légumes grillés"
-      }
-     ]
-    }
-   ]
-  },
-  {
    "date": "2026-11-19",
    "restaurants": [
     {
@@ -83,6 +53,6 @@
    ]
   }
  ],
- "updated": "19/11/2026 à 21:30",
- "updatedAt": "2026-11-19T21:30+01:00"
+ "updated": "20/11/2026 à 08:06",
+ "updatedAt": "2026-11-20T08:06+01:00"
 }

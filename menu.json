@@ -1,41 +1,139 @@
 {
  "days": [
   {
-   "date": "2026-11-19",
+   "date": "2026-11-23",
    "restaurants": [
     {
      "name": "Restaurant Principal",
      "items": [
       {
        "type": "Saine Attitude",
-       "label": "Le parmentier de champignons au coulis d'oignons"
+       "label": "Feuilleté gourmand 4 fromages, sauce au bleu"
       },
       {
        "type": "Le Marché",
-       "label": "Pavé de saumon, crème à l'aneth"
+       "label": "Dos de lieu noir au thym"
       },
       {
        "type": "BBQ & Co",
-       "label": "Faux filet à l'échalotes"
+       "label": "Steak haché aux 3 poivres"
       },
       {
        "type": "Trattoria",
-       "label": "Gratin aux légumes et tofu"
+       "label": "Ragoût de lentille corail aux légumes"
       },
       {
        "type": "Bistronomie",
-       "label": "Boulettes d'agneau au romarin"
+       "label": "Saucisse de Toulouse à la moutarde à l'ancienne"
       },
       {
        "type": "Les Comptoirs",
-       "label": "Sauté de porc au chorizo"
+       "label": "Sauté d'agneau aux fruits secs"
       }
      ]
     }
    ]
   },
   {
-   "date": "2026-11-20",
+   "date": "2026-11-24",
+   "restaurants": [
+    {
+     "name": "Restaurant Principal",
+     "items": [
+      {
+       "type": "Saine Attitude",
+       "label": "Quiche aux oignons"
+      },
+      {
+       "type": "Le Marché",
+       "label": "Pavé de hoki à l'oriental"
+      },
+      {
+       "type": "BBQ & Co",
+       "label": "Escalope de volaille"
+      },
+      {
+       "type": "Trattoria",
+       "label": "L'oeuf à la Florentine"
+      },
+      {
+       "type": "Bistronomie",
+       "label": "Côte de porc au poivre vert"
+      },
+      {
+       "type": "Les Comptoirs",
+       "label": "Bœuf bourguignon"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "date": "2026-11-25",
+   "restaurants": [
+    {
+     "name": "Restaurant Principal",
+     "items": [
+      {
+       "type": "Saine Attitude",
+       "label": "Clafouti aux poivrons & chèvre"
+      },
+      {
+       "type": "Le Marché",
+       "label": "Pavé de thon"
+      },
+      {
+       "type": "BBQ & Co",
+       "label": "jambon grillé"
+      },
+      {
+       "type": "Trattoria",
+       "label": "Galette végétarienne"
+      },
+      {
+       "type": "Bistronomie",
+       "label": "Osso bucco de dinde à la tomate"
+      },
+      {
+       "type": "Les Comptoirs",
+       "label": "Blanquette de veau"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "date": "2026-11-26",
+   "restaurants": [
+    {
+     "name": "Restaurant Principal",
+     "items": [
+      {
+       "type": "Saine Attitude",
+       "label": "Croziflette aux poireaux & au citron"
+      },
+      {
+       "type": "Le Marché",
+       "label": "Colin d'Alaska aux agrumes"
+      },
+      {
+       "type": "BBQ & Co",
+       "label": "Filet de poulet"
+      },
+      {
+       "type": "Bistronomie",
+       "label": "Galette jambon, champignons et fromage"
+      },
+      {
+       "type": "Les Comptoirs",
+       "label": "Carbonade de joue de bœuf"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "date": "2026-11-27",
    "restaurants": [
     {
      "name": "Restaurant Principal",
@@ -46,13 +144,13 @@
       },
       {
        "type": "Trattoria",
-       "label": "Pizza chèvre miel"
+       "label": "Pizza bolognaise"
       }
      ]
     }
    ]
   }
  ],
- "updated": "20/11/2026 à 21:07",
- "updatedAt": "2026-11-20T21:07+01:00"
+ "updated": "23/11/2026 à 16:50",
+ "updatedAt": "2026-11-23T16:50+01:00"
 }

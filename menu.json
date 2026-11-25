@@ -1,40 +1,6 @@
 {
  "days": [
   {
-   "date": "2026-11-23",
-   "restaurants": [
-    {
-     "name": "Restaurant Principal",
-     "items": [
-      {
-       "type": "Saine Attitude",
-       "label": "Feuilleté gourmand 4 fromages, sauce au bleu"
-      },
-      {
-       "type": "Le Marché",
-       "label": "Dos de lieu noir au thym"
-      },
-      {
-       "type": "BBQ & Co",
-       "label": "Steak haché aux 3 poivres"
-      },
-      {
-       "type": "Trattoria",
-       "label": "Ragoût de lentille corail aux légumes"
-      },
-      {
-       "type": "Bistronomie",
-       "label": "Saucisse de Toulouse à la moutarde à l'ancienne"
-      },
-      {
-       "type": "Les Comptoirs",
-       "label": "Sauté d'agneau aux fruits secs"
-      }
-     ]
-    }
-   ]
-  },
-  {
    "date": "2026-11-24",
    "restaurants": [
     {
@@ -151,6 +117,6 @@
    ]
   }
  ],
- "updated": "24/11/2026 à 23:21",
- "updatedAt": "2026-11-24T23:21+01:00"
+ "updated": "25/11/2026 à 09:24",
+ "updatedAt": "2026-11-25T09:24+01:00"
 }

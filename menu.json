@@ -1,40 +1,6 @@
 {
  "days": [
   {
-   "date": "2026-11-24",
-   "restaurants": [
-    {
-     "name": "Restaurant Principal",
-     "items": [
-      {
-       "type": "Saine Attitude",
-       "label": "Quiche aux oignons"
-      },
-      {
-       "type": "Le Marché",
-       "label": "Pavé de hoki à l'oriental"
-      },
-      {
-       "type": "BBQ & Co",
-       "label": "Escalope de volaille"
-      },
-      {
-       "type": "Trattoria",
-       "label": "L'oeuf à la Florentine"
-      },
-      {
-       "type": "Bistronomie",
-       "label": "Côte de porc au poivre vert"
-      },
-      {
-       "type": "Les Comptoirs",
-       "label": "Bœuf bourguignon"
-      }
-     ]
-    }
-   ]
-  },
-  {
    "date": "2026-11-25",
    "restaurants": [
     {
@@ -117,6 +83,6 @@
    ]
   }
  ],
- "updated": "25/11/2026 à 22:37",
- "updatedAt": "2026-11-25T22:37+01:00"
+ "updated": "26/11/2026 à 09:09",
+ "updatedAt": "2026-11-26T09:09+01:00"
 }

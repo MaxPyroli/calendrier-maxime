@@ -1,40 +1,6 @@
 {
  "days": [
   {
-   "date": "2026-11-25",
-   "restaurants": [
-    {
-     "name": "Restaurant Principal",
-     "items": [
-      {
-       "type": "Saine Attitude",
-       "label": "Clafouti aux poivrons & chèvre"
-      },
-      {
-       "type": "Le Marché",
-       "label": "Pavé de thon"
-      },
-      {
-       "type": "BBQ & Co",
-       "label": "jambon grillé"
-      },
-      {
-       "type": "Trattoria",
-       "label": "Galette végétarienne"
-      },
-      {
-       "type": "Bistronomie",
-       "label": "Osso bucco de dinde à la tomate"
-      },
-      {
-       "type": "Les Comptoirs",
-       "label": "Blanquette de veau"
-      }
-     ]
-    }
-   ]
-  },
-  {
    "date": "2026-11-26",
    "restaurants": [
     {
@@ -83,6 +49,6 @@
    ]
   }
  ],
- "updated": "26/11/2026 à 22:26",
- "updatedAt": "2026-11-26T22:26+01:00"
+ "updated": "27/11/2026 à 09:19",
+ "updatedAt": "2026-11-27T09:19+01:00"
 }

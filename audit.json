@@ -9153,17 +9153,6 @@
     "series_blocked": false
   },
   {
-    "uid": "2ql3f8r79eu6aqqs3o3pddd8j9@google.com",
-    "summary": "Conception systèmes transport et mobilité",
-    "start": "vDDDTypes(2026-11-30 08:30:00+00:00, Parameters({}))",
-    "classification": "exclude",
-    "rules": [
-      "conception-non-acost"
-    ],
-    "kept": false,
-    "series_blocked": false
-  },
-  {
     "uid": "nuf9bmcn1qf8ue6orludicg4t8@google.com",
     "summary": "UE1 Réseaux et territoires",
     "start": "vDDDTypes(2026-11-30 12:30:00+00:00, Parameters({}))",
@@ -9725,14 +9714,14 @@
     "series_blocked": false
   },
   {
-    "uid": "q59963cf2s2ivenckhgr2d4lkg@google.com",
-    "summary": "Atelier",
-    "start": "vDDDTypes(2027-01-06 15:00:00+00:00, Parameters({}))",
-    "classification": "keep",
+    "uid": "0c3uusdr92o3mmgip591hafasv@google.com",
+    "summary": "Conception systèmes transport et mobilité",
+    "start": "vDDDTypes(2027-01-06 14:30:00+00:00, Parameters({}))",
+    "classification": "exclude",
     "rules": [
-      "projet"
+      "conception-non-acost"
     ],
-    "kept": true,
+    "kept": false,
     "series_blocked": false
   },
   {
@@ -10034,7 +10023,7 @@
   },
   {
     "uid": "4sgep966egg93s25fm9bu742fi@google.com",
-    "summary": "Conception systèmes transport et mobilité",
+    "summary": "Conception systèmes transport et mobilité (restitutions)",
     "start": "vDDDTypes(2027-01-21 13:00:00+00:00, Parameters({}))",
     "classification": "exclude",
     "rules": [
